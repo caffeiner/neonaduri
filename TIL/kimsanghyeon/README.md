@@ -105,3 +105,15 @@
 ### Reducer
 
 ![image](/uploads/7bc40f8de798b6697b6efb3d74bc6496/image.png)
+
+### 2022.09.02
+
+# all pair partition
+
+### Mapper
+
+![image](/uploads/22b540c6fb3352e5a57234015f9c44fc/image.png)
+
+### Reducer
+
+![image](/uploads/74ca6dddbf1bada17737becec12c6076/image.png)
