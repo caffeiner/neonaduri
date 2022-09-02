@@ -93,3 +93,15 @@
 - 맵 단계가 끝나면, 중간 단계의 키 값을 기반으로 중간 값을 리스트 형태로 조합하게 됨. 그 뒤 리스트는 리듀서로 전달이 되는데 수행 절차는 아래와 같음
 - 하나의 리듀서나 여러개의 리듀서가 존재할 때 중간 키와 연관되어 있는 모든 값은 같은 리듀서로 보내짐
 - 중간 키와 그 값들의 리스트들은 키 순서대로 정렬되어 리듀서로 보내짐 이 단계를 셔플과 정렬이라고 함
+
+### 2022.08.31
+
+# wordcount sort
+
+### Mapper
+
+![Untitled](wordcount%20sort%2002592def92a447cdbf80a6d43a16c4a6/Untitled.png)
+
+### Reducer
+
+![Untitled](wordcount%20sort%2002592def92a447cdbf80a6d43a16c4a6/Untitled%201.png)
