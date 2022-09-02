@@ -100,8 +100,8 @@
 
 ### Mapper
 
-![Untitled](wordcount%20sort%2002592def92a447cdbf80a6d43a16c4a6/Untitled.png)
+![image](/uploads/a9c7fe8774885af8db1b46d297e7f324/image.png)
 
 ### Reducer
 
-![Untitled](wordcount%20sort%2002592def92a447cdbf80a6d43a16c4a6/Untitled%201.png)
+![image](/uploads/7bc40f8de798b6697b6efb3d74bc6496/image.png)
