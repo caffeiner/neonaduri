@@ -104,3 +104,29 @@
 - 데이터들은 각 **파티션의 좌표**와 **파티션별로 들어가는 짝꿍의 개수**만큼의 데이터가 필요하게 된다
     - key : (Px,Py)   [Px : 파티션의 row  /   Py : 파티션의 column]
     - value : (matrix , index , value )  [matrix : 해당 행렬  /  index: matrix에서의 인덱스 / value: 값]
+
+
+
+
+
+### 4일차
+- All Pair Partition 알고리즘은 강력하지만, MxN 개의 쌍을 모두 확인해야 한다.
+- 그 결과, 쌍이 이루어지지 않은 것들도 확인해봐야 하기 때문에 효율성이 떨어진다.
+    
+    ⇒ Inverted Index를 사용해서 값마다 계산해보자!
+    
+
+## 방법
+
+---
+
+1. Inverted Index table 만들기
+    - 보통 id를 key로, values를 값들로 가지게 된다
+    - 하지만 하나라도 값이 있는 것을 확인하기 위해서,  value별로 값으로 id를 가지도록 한다
+        
+        ⇒Inverted Index
+        
+2. Inverted Index table을 기준으로 Global Hash Table 만들기
+    - 각 value별 id들을 전부 쌍으로 만들어준다.
+        - Global Hash table에서 key는 id의 쌍, value는 그 쌍이 되는 값들의 개수이다
+        - 그렇기 때문에, 하나씩 만들어서 table로 만들 때, global hash table에서 value들을 하나씩 올려주는 작업을 수행하게 된다
