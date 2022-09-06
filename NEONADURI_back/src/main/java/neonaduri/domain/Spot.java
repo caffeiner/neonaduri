@@ -27,8 +27,8 @@ public class Spot {
     @JoinColumn(name = "class_id", nullable = false)
     private Classification classId;
 
-//    @OneToMany(mappedBy = "spot", fetch = FetchType.LAZY)
-//    private Set<Review> reviews = new HashSet<>();
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Review> reviews = new HashSet<>();
 
     @Column(name = "spot_name", nullable = false)
     private String spotName;

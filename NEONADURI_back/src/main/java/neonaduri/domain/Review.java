@@ -19,12 +19,12 @@ public class Review {
     @Column(name = "review_id")
     private Long reviewId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "spot_id")
-//    private Spot spot;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "spot_id")
+    private Spot spot;
 
     //다대다 관계 mapping
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ReviewTag> reviewTags = new HashSet<>();
 
     @Column(name = "review_content", nullable = false)

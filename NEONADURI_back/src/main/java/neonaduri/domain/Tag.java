@@ -19,7 +19,7 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagId;
 
-    @OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tag",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ReviewTag> reviewTags = new HashSet<>();
 
     @Column(name = "tag_content", nullable = false)
