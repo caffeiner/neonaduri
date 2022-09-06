@@ -20,8 +20,9 @@ public class Store {
     @Column(name = "store_id")
     private Long storeId;
 
-//    @JoinColumn(name = "spot_id", referencedColumnName = "spot_id")
-//    private Spot spotId
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "spot_id", referencedColumnName = "spot_id")
+    private Spot spotId;
 
     @Column(name = "store_name", nullable = false)
     private String storeName;

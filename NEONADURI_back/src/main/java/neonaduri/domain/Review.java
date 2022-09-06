@@ -1,35 +1,31 @@
-package neonaduri.domain.Review;
+package neonaduri.domain;
 
 
-import com.fasterxml.jackson.databind.node.BigIntegerNode;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
 @Table(name = "review")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
-
-    //다대다 관계 mapping
-    @OneToMany(mappedBy = "review")
-    private List<ReviewTag> reviewTags = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private BigInteger reviewId;
+    private Long reviewId;
 
-    
-    //foreign key
-//    private BigInteger spotId;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "spot_id")
+//    private Spot spot;
 
+    //다대다 관계 mapping
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
+    private Set<ReviewTag> reviewTags = new HashSet<>();
 
     @Column(name = "review_content", nullable = false)
     private String reviewContent;

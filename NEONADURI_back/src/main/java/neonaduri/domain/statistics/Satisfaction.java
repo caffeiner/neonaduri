@@ -3,10 +3,10 @@ package neonaduri.domain.statistics;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import neonaduri.domain.type.SatisfactionType;
 
 import javax.persistence.*;
+
 @Entity
 @Getter
 @Table(name = "sat")
@@ -18,7 +18,7 @@ public class Satisfaction {
     @Column(name = "sat_id")
     private Long satId;
 
-    @Column(name = "sat_yaer", nullable = false)
+    @Column(name = "sat_year", nullable = false)
     private Integer satYear;
 
     @Column(name = "sat_region", nullable = false)
