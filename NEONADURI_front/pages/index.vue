@@ -7,7 +7,8 @@
     >
       <img src="/logo/logo-white.png" alt="" class="bounce-in-top logo-image" />
     </div>
-    <div>TTT</div>
+  
+   
   </div>
 </template>
 
