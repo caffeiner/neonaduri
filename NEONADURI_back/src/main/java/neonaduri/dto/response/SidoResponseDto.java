@@ -1,12 +1,10 @@
 package neonaduri.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@Setter
-public class RegionResponseDto {
+@Data
+public class SidoResponseDto {
     private String sido;
 }
