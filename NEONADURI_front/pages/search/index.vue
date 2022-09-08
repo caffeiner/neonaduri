@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <div class="main-content">
+    <div class="main-content fadeInUp">
       <div class="recommand">
         <div class="recommand-content">
           <div class="recommand-left">
@@ -26,10 +26,32 @@
         </div>
       </div>
     </div>
-    <div>
-      <div>검색</div>
-      <div>지역</div>
-      <div>표</div>
+    <div class="option-content fadeInUp">
+      <div class="option">
+        <div class="search-bar">
+          <h1>검색 :</h1>
+          <input type="text" class="search-input" />
+        </div>
+        <div class="search-bar">
+          <h1>지역 :</h1>
+          <b-form-select
+            v-model="sido"
+            :options="sidoOptions"
+            class="selected"
+          ></b-form-select>
+          <b-form-select
+            v-model="sigungu"
+            :options="sigunguOptions"
+            class="selected"
+          ></b-form-select>
+          <b-form-select
+            v-model="myeon"
+            :options="myeonOptions"
+            class="selected"
+          ></b-form-select>
+        </div>
+        <div>표</div>
+      </div>
     </div>
     <navbar-component></navbar-component>
   </div>
@@ -38,10 +60,65 @@
 <script>
 export default {
   name: 'SearchPage',
+  data() {
+    return {
+      sido: 'all',
+      sigungu: 'all',
+      myeon: 'all',
+      sidoOptions: [{ value: 'all', text: '전체' }],
+      sigunguOptions: [{ value: 'all', text: '전체' }],
+      myeonOptions: [{ value: 'all', text: '전체' }],
+    }
+  },
 }
 </script>
 
 <style scoped>
+.selected {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+.custom-select {
+  width: 25%;
+}
+.search-input {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  width: 800px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  padding: 10px;
+  font-size: 1em;
+  color: #676767;
+  transition: border 0.5s;
+  -webkit-transition: border 0.5s;
+  -moz-transition: border 0.5s;
+  -o-transition: border 0.5s;
+  border: solid 3px #98d4f3;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border: solid 3px #02a6f8;
+}
+.option-content {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+.option {
+  padding: 2%;
+  border-radius: 15px;
+  background-color: white;
+  width: 80%;
+}
 .recommand-left {
   display: flex;
 }
@@ -84,5 +161,19 @@ export default {
   height: 20px;
   display: flex;
   font-size: 20px;
+}
+
+.fadeInUp {
+  animation: fadeInUp 1s ease backwards;
+}
+@keyframes fadeInUp {
+  0% {
+    transform: translate(0px, 100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0px, 0);
+    opacity: 1;
+  }
 }
 </style>
