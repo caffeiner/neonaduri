@@ -2,10 +2,12 @@ package neonaduri.domain;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -34,11 +36,21 @@ public class Review {
     private String reviewContent;
 
     @Column(name = "review_date", nullable = false)
-    private Date reviewDate;
+    private LocalDateTime reviewDate;
 
     @Column(name = "review_image", nullable = false)
     private String reviewImage;
 
     @Column(name = "review_password", nullable = false)
     private String reviewPassword;
+
+    @Builder
+    Review(Spot spotId, Set<Tag> tags, String reviewContent, LocalDateTime reviewDate, String reviewImage, String reviewPassword){
+        this.spotId = spotId;
+        this.tags = tags;
+        this.reviewContent = reviewContent;
+        this.reviewDate = reviewDate;
+        this.reviewImage = reviewImage;
+        this.reviewPassword = reviewPassword;
+    }
 }
