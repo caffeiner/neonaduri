@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,7 +19,6 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,7 +45,7 @@ public class Review {
     private String reviewPassword;
 
     @Builder
-    Review(Spot spotId, Set<Tag> tags, String reviewContent, LocalDateTime reviewDate, String reviewImage, String reviewPassword){
+    public Review(Spot spotId, Set<Tag> tags, String reviewContent, LocalDateTime reviewDate, String reviewImage, String reviewPassword) {
         this.spotId = spotId;
         this.tags = tags;
         this.reviewContent = reviewContent;

@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SpotRes {
+public class SpotContentRes {
 
     private final String spotName;
 
@@ -16,8 +16,8 @@ public class SpotRes {
 
     private final String spotImage;
 
-    @Builder(builderMethodName = "createSpotRes")
-    SpotRes(String spotName, Float lat, Float lng, String spotContent, String spotImage){
+    @Builder
+    SpotContentRes(String spotName, Float lat, Float lng, String spotContent, String spotImage){
         this.spotName = spotName;
         this.lat = lat;
         this.lng = lng;

@@ -2,10 +2,12 @@ package neonaduri.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import neonaduri.api.service.SpotService;
-import neonaduri.domain.Spot;
-import neonaduri.dto.response.SpotReviewRes;
+import neonaduri.dto.response.SpotDetailsRes;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,13 +16,9 @@ public class SpotController {
 
     private final SpotService spotService;
 
-    @GetMapping("/{content}")
-    public ResponseEntity<Spot> findSpotWithContent(@PathVariable String content) {
-        return ResponseEntity.ok(spotService.getSpotWithContent(content));
-    }
-
-    @GetMapping("/review/{spotId}")
-    public ResponseEntity<SpotReviewRes> showSpotReview(@PathVariable("spotId") Long spotId) {
-        return ResponseEntity.ok(spotService.getSpotReview(spotId));
+    /** A01: 특정 장소에 작성된 설명과 리뷰 출력 API */
+    @GetMapping("/{spotId}")
+    public ResponseEntity<SpotDetailsRes> showDetailsSpotInfo(@PathVariable("spotId") Long spotId) {
+        return ResponseEntity.ok(spotService.getSpotDetailsInfo(spotId));
     }
 }

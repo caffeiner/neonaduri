@@ -2,12 +2,11 @@ package neonaduri.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import neonaduri.domain.Review;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
-public class SpotReviewRes {
+public class SpotDetailsRes {
 
     private final String spotContent;
 
@@ -15,13 +14,13 @@ public class SpotReviewRes {
 
     private final String spotImage;
 
-    private final Set<Review> reviews;
+    private final List<ReviewTagsRes> reviewContainsTags;
 
     @Builder
-    SpotReviewRes(String spotContent, String spotName, String spotImage, Set<Review> reviews) {
+    public SpotDetailsRes(String spotContent, String spotName, String spotImage, List<ReviewTagsRes> reviewContainsTags) {
         this.spotContent = spotContent;
         this.spotName = spotName;
         this.spotImage = spotImage;
-        this.reviews = reviews;
+        this.reviewContainsTags = reviewContainsTags;
     }
 }

@@ -17,15 +17,10 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagId;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
-    private Set<Review> reviews = new HashSet<>();
-
     @Column(name = "tag_content", nullable = false)
     private String tagContent;
 
-    @Builder
-    Tag(Review review, String tagContent) {
-        reviews.add(review);
+    public Tag(String tagContent){
         this.tagContent = tagContent;
     }
 }

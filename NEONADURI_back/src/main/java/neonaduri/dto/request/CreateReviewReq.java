@@ -2,14 +2,16 @@ package neonaduri.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import neonaduri.domain.Tag;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
-@Getter
+@Getter @ToString
 public class CreateReviewReq {
 
     @NotNull
@@ -24,11 +26,11 @@ public class CreateReviewReq {
     @Size(min = 4, max = 100)
     private final String reviewPassword;
 
-    private final Set<Tag> tags;
+    private final String tags;
 
-    @Builder(builderMethodName = "createReviewReq")
+    @Builder
     public CreateReviewReq(
-            Long spotId, String reviewImage, String reviewContent, String reviewPassword, Set<Tag> tags) {
+            Long spotId, String reviewImage, String reviewContent, String reviewPassword, String tags) {
         this.spotId = spotId;
         this.reviewImage = reviewImage;
         this.reviewContent = reviewContent;
