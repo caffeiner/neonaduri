@@ -3,7 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 module.exports = {
   head: {
     script: [
-      { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' }
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
+      { src: 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9'}
     ],
     link: [
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
@@ -54,7 +55,7 @@ export default {
     '@nuxtjs/axios',
   ],
 
-  
+
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
