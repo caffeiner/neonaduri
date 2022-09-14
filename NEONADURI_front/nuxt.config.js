@@ -1,13 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
 
-module.exports = {
-  head: {
-    script: [],
-    link: [
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' }
-    ]
-  }
-}
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
