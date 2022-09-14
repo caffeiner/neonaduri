@@ -26,9 +26,10 @@
 </template>
 
 <script>
-  import * as echarts from "echarts"; //echart를 전역으로 불러옴
+  import * as echarts from "echarts"; // echart를 전역으로 불러옴
   import VueWordCloud from 'vuewordcloud';
   import axios from 'axios';
+  import { mapActions } from "vuex";
   
   
   export default {
@@ -48,21 +49,29 @@
     components: {
         [VueWordCloud.name]: VueWordCloud,
     },
+    computed:{
+      // ...mapGetters('statistics',['words'])
+    },
+    created(){
+      this.callSatList();
+      this.callSelList();
+      this.callVisitedList();
+    },
+    methods:{
+      ...mapActions('statistics',['callSatList','callSelList','callVisitedList'])
+    },
     mounted(){
        // Initialize the echarts instance based on the prepared dom
-       var myChart = echarts.init(document.getElementById('main'));
+       const myChart = echarts.init(document.getElementById('main'));
 
         // Specify the configuration items and data for the chart
-        var option = {
-          title: {
-            text: 'ECharts Getting Started Example'
-          },
+        const option = {
           tooltip: {},
           legend: {
-            data: ['sales','test']
+            data: ['물가','식당 및 음식','자연경관']
           },
           xAxis: {
-            data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+            data: ['서울', '부산', '대구', '인천', '광주', '대전', '울산','세종','경기','강원','충북','충남','전북','전남','경북','경남','제주']
           },
           yAxis: [
             {
@@ -78,14 +87,19 @@
           ],
           series: [
             {
-              name: 'sales',
+              name: '물가',
               type: 'line',
               data: [15, 70, 64, 57, 87, 100]
             },
             {
-              name: 'test',
+              name: '식당 및 음식',
               type: 'line',
               data: [10, 23, 5, 17, 3, 34]
+            },
+            {
+              name: '자연경관',
+              type: 'line',
+              data: [43, 33,75, 67, 93, 64]
             }
           ]
         };
@@ -95,12 +109,12 @@
 
        
 
-        /////////////////////////////
-        var ROOT_PATH = 'https://echarts.apache.org/examples';
+        
+        const ROOT_PATH = 'https://echarts.apache.org/examples';
 
-        var chartDom2 = document.getElementById('myMap');
-        var myChart2 = echarts.init(chartDom2);
-        var option2;
+        const chartDom2 = document.getElementById('myMap');
+        const myChart2 = echarts.init(chartDom2);
+        let option2;
 
         myChart2.showLoading();
         axios.get(ROOT_PATH + '/data/asset/geo/USA.json')
@@ -160,7 +174,7 @@
             },
             toolbox: {
               show: true,
-              //orient: 'vertical',
+              // orient: 'vertical',
               left: 'left',
               top: 'top',
               feature: {
