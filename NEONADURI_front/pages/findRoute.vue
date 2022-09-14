@@ -30,9 +30,6 @@
           <div class="map">
 
 
-
-
-
             <div id="map_wrap" class="map_wrap">
               <div id="map_div"></div>
             </div>
@@ -57,6 +54,7 @@
 
     </div>
   </div>
+
 </template>
 <script	src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9"></script>
@@ -264,15 +262,15 @@ export default {
         height: 100vh;
     }
 
-    .container{
-        display:inline;
-    }
+.container {
+  display: inline;
+}
 
-    .banner{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
     .input-form{
         width: 18vw;
@@ -290,49 +288,49 @@ export default {
         justify-content: center;
     }
 
-    .my-button{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .types{
-        width: 18vw;
-        height: 6vh;
-        margin-top: 1vh;
-        margin-bottom: 3vh;
-        margin-left: 4vw;
-        margin-right: 4vw;
-    }
+.my-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .reInput{
-        display:flex;
-        justify-content: flex-start;
-    }
+.types {
+  width: 18vw;
+  height: 6vh;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+  margin-left: 4vw;
+  margin-right: 4vw;
+}
 
-    .roadFinding{
-        display:flex;
-        justify-content: flex-end;
-    }
+.reInput {
+  display: flex;
+  justify-content: flex-start;
+}
 
-    .buttons{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width:5vw;
-        border-radius: 20px;
-        border: 1px solid white;
-        float: left;
-        box-shadow: 3px 3px 3px black;
+.roadFinding {
+  display: flex;
+  justify-content: flex-end;
+}
 
-        transition-duration: 0.3s;
-    }
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5vw;
+  border-radius: 20px;
+  border: 1px solid white;
+  float: left;
+  box-shadow: 3px 3px 3px black;
 
-    .buttons:active{
-        margin-left: 5px;
-        margin-top:5px;
-        box-shadow: none;
-    }
+  transition-duration: 0.3s;
+}
 
     .roadMap{
       display: flex;
@@ -353,4 +351,9 @@ export default {
     }
 
 
+.buttons:active {
+  margin-left: 5px;
+  margin-top: 5px;
+  box-shadow: none;
+}
 </style>
