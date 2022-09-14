@@ -58,13 +58,13 @@
 <script	src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9"></script>
 <script>
-
+import $ from 'jquery';
 
 export default {
-  data(){
-    return{
-
-    }
+  head:{
+    script:[
+      {src:"https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9"}
+    ]
   },
   methods:{
     initTmap(){
