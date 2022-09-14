@@ -30,6 +30,9 @@
           <div class="map">
 
 
+
+
+
             <div id="map_wrap" class="map_wrap">
               <div id="map_div"></div>
             </div>
