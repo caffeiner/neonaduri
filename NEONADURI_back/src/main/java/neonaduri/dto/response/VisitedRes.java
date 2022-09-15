@@ -6,15 +6,15 @@ import neonaduri.domain.statistics.Visited;
 @Getter
 public class VisitedRes {
 
-    private  Long visitedId;
+    private final Long visitedId;
 
-    private Integer visitedRegion;
+    private final String visitedRegion;
 
-    private Integer visitedYear;
+    private final Integer visitedYear;
 
-    private Integer visitedNum;
+    private final Integer visitedNum;
 
-    public VisitedRes(Visited visited){
+    public VisitedRes(Visited visited) {
         this.visitedId = visited.getVisitedId();
         this.visitedRegion = visited.getVisitedRegion();
         this.visitedYear = visited.getVisitedYear();
