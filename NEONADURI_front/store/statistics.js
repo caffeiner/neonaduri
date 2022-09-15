@@ -6,8 +6,7 @@ export const state = () =>(
         priceList:[],
         foodList:[],
         natureList:[],
-
-
+        regionList:[],
     }
 )
 
@@ -16,11 +15,11 @@ export const mutations = {
     SET_SAT(state, payload){
         payload.forEach(element => {
           if(element.satType===0){
-            state.priceList.push(payload);
+            state.priceList.push(payload.satScore);
           }else if(element.satType===1){
-            state.foodList.push(payload);
-          }if(element.satType===0){
-            state.natureList.push(payload);
+            state.foodList.push(payload.satScore);
+          }if(element.satType===2){
+            state.natureList.push(payload.satScore);
           }
         });
     },
@@ -32,6 +31,16 @@ export const mutations = {
         arr.push(element.selPercent);
 
         state.words.push(arr);
+      })
+    },
+    SET_VISITED(state, payload){
+      payload.forEach(element=>{
+        const arr=[];
+
+        arr.push(element.visitedRegion);
+        arr.push(element.visitedNum);
+
+        state.regionList.push(arr);
       })
     }
 }
@@ -45,7 +54,6 @@ export const actions = {
     callSatList({commit}){
         getSat(
             ({data})=>{
-                console.log(data)
                 commit('SET_SAT',data)
             },
             (error)=>{
@@ -56,7 +64,6 @@ export const actions = {
     callSelList({commit}){
         getSel(
             ({data})=>{
-                console.log(data)
                 commit('SET_SEL',data)
             },
             (error)=>{
