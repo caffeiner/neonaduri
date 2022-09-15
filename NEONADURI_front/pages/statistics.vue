@@ -1,5 +1,5 @@
 <template>
-    
+
   <div class="statistics">
     <div class="white-back">
       <div class="map">
@@ -21,7 +21,7 @@
         <div id="main" style="width:100%; height:100%;" ></div>
       </div>
     </div>
-      
+
   </div>
 </template>
 
@@ -30,8 +30,8 @@
   import VueWordCloud from 'vuewordcloud';
   import axios from 'axios';
   import { mapActions } from "vuex";
-  
-  
+
+
   export default {
   	name:'',
     data(){
@@ -56,9 +56,6 @@
       this.callSatList();
       this.callSelList();
       this.callVisitedList();
-    },
-    methods:{
-      ...mapActions('statistics',['callSatList','callSelList','callVisitedList'])
     },
     mounted(){
        // Initialize the echarts instance based on the prepared dom
@@ -107,9 +104,9 @@
         // Display the chart using the configuration items and data just specified.
         myChart.setOption(option);
 
-       
 
-        
+
+
         const ROOT_PATH = 'https://echarts.apache.org/examples';
 
         const chartDom2 = document.getElementById('myMap');
@@ -252,12 +249,13 @@
             ]
           };
           myChart2.setOption(option2);
-        
+
       })
-          
-          
-        
-        
+
+
+
+
+
         option2 && myChart2.setOption(option2);
 
         window.onresize = function() {
@@ -266,7 +264,10 @@
         };
 
 
-      }
+      },
+       methods:{
+        ...mapActions('statistics',['callSatList','callSelList','callVisitedList'])
+      },
 }
 </script>
 
