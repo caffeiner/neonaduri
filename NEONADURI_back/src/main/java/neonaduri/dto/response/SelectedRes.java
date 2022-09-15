@@ -6,15 +6,15 @@ import neonaduri.domain.statistics.Selected;
 @Getter
 public class SelectedRes {
 
-    private Long selId;
+    private final Long selId;
 
-    private String selReason;
+    private final String selReason;
 
-    private Integer visitedYear;
+    private final Integer visitedYear;
 
-    private Float selPercent;
+    private final Float selPercent;
 
-    public SelectedRes(Selected selected){
+    public SelectedRes(Selected selected) {
         this.selId = selected.getSelId();
         this.selReason = selected.getSelReason();
         this.visitedYear = selected.getVisitedYear();

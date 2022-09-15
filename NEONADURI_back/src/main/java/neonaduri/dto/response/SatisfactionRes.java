@@ -1,26 +1,23 @@
 package neonaduri.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import neonaduri.domain.statistics.Satisfaction;
 import neonaduri.domain.type.SatisfactionType;
 
 @Getter
 public class SatisfactionRes {
 
-    private Long satId;
+    private final Long satId;
 
-    private Integer satYear;
+    private final Integer satYear;
 
-    private String satRegion;
+    private final String satRegion;
 
-    private Float satScore;
+    private final Float satScore;
 
-    private SatisfactionType satType;
+    private final SatisfactionType satType;
 
-    public SatisfactionRes(Satisfaction satisfaction){
+    public SatisfactionRes(Satisfaction satisfaction) {
         this.satId = satisfaction.getSatId();
         this.satYear = satisfaction.getSatYear();
         this.satRegion = satisfaction.getSatRegion();
