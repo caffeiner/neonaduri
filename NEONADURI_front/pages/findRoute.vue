@@ -4,7 +4,7 @@
         <div class="banner">
             <img src="/banner/banner.png" style="width: 50%;">
         </div>
-        <div class="search">
+        <!-- <div class="search">
             <div class="input-group mb-3 box">
                 <input id="searchKeyword" v-model="startPoint"  type="text" class="form-control input-form fontSize"  aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="출발지 입력">
                 <button id="btn_select">클릭!</button>
@@ -15,10 +15,9 @@
             <div class="input-group mb-3 box">
                 <input v-model="endPoint" type="text" class="form-control input-form fontSize" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="도착지 입력">
             </div>
-        </div>
-        <div class="my-button">
+        </div> -->
+        <!-- <div class="my-button">
             <div class="types reInput">
-
                 <div class="buttons fontSize" @click="resetBoxes()">
                     다시입력
                 </div>
@@ -27,32 +26,80 @@
                 <div class="buttons fontSize">
                     길찾기     >
                 </div>
-
             </div>
+        </div> -->
+
+        <div class="map">
+          <div id="map_wrap" class="map_wrap">
+            <div id="map_div"></div>
+          </div>
         </div>
-        <div class="roadMap">
 
-          <div class="map">
-            <div id="map_wrap" class="map_wrap">
-              <div id="map_div"></div>
+        <div class="buttonBoxes">
+          <div class="types reInput">
+              <div class="buttons fontSize" @click="toggle(0)">
+                  시작점
+              </div>
+          </div>
+          <div class="types reInput">
+              <div class="buttons fontSize" @click="toggle(1)">
+                  도착점
+              </div>
+          </div>
+          <div class="types reInput">
+              <div class="buttons fontSize" @click="toggle(2)">
+                  경로보기
+              </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="inputBox">
+
+            <b-input-group>
+              <b-form-input id="searchKeyword"  @keyup.enter="findTarget()" placeholder="시작점 검색"></b-form-input>
+              <b-input-group-append>
+                <b-button variant="outline-primary" @click="findTarget()">검색</b-button>
+              </b-input-group-append>
+            </b-input-group>
+            
+            <div>
+              {{startPointObject.name}}
+            </div>
+            <!-- <input v-show="findStartPoint" type="text" placeholder="출발지를 입력해주세요">
+            <input v-show="findEndPoint" type="text" placeholder="도착지를 입력해주세요"> -->
+          </div>
+
+          <!-- 3가지 형태()-->
+          <div class="stopover">
+            <div v-show="findStartPoint" style="border-right:1px solid black">
+              <ul id="searchResult" name="searchResult">
+                <div v-for="(item, index) in searchResult" :key="index">
+                  {{index}}
+                  {{startIndex}}
+                  <img :src="item.src" style='vertical-align:middle;'/><span>{{item.name}}</span> 
+                  <b-button variant='success' name='sendBtn' @click="selected(item,0,index)">시작점 설정</b-button>
+                </div>
+              </ul>
+            </div>
+            <div v-show="findEndPoint" >
+              <b-button variant='success' name='sendBtn'>시작점 설정</b-button>
+            </div>
+            
+            <!-- 경로찾기 -->
+            <div v-show="findRoute">
+                <p id="result"></p>
+                <select id="selectLevel">
+                  <option value="0" selected="selected">교통최적+추천</option>
+                  <option value="1" >교통최적+무료우선</option>
+                  <option value="2" >교통최적+최소시간</option>
+                  <option value="3" >교통최적+초보</option>
+                </select>
+                <button id="btn_select" type="button"  class="btn btn-primary" >적용하기</button>
+                <button @click="findRouteTmap()">눌러주세용ㅇㅇㅇㅇ</button>
+                <hr>
             </div>
           </div>
-
-          <div class="stopover">
-            <p id="result"></p>
-            <select id="selectLevel">
-              <option value="0" selected="selected">교통최적+추천</option>
-              <option value="1" >교통최적+무료우선</option>
-              <option value="2" >교통최적+최소시간</option>
-              <option value="3" >교통최적+초보</option>
-            </select>
-            <button id="btn_select" type="button"  class="btn btn-primary" >적용하기</button>
-            <button @click="findRouteTmap()">눌러주세용ㅇㅇㅇㅇ</button>
-            <hr>
-
-          </div>
-
-
         </div>
 
 
@@ -74,19 +121,84 @@ export default {
     ]
   },data(){
     return{
+      //검색결과 리스트
+      searchResult:[],
+      startPointObject:{},
+      startIndex:-1,
+      startMarker:Object,
+      endPointObject:{},
+      // 페이지 보이기
+      findStartPoint:true,
+      findEndPoint:false,
+      findRoute:false,
+      // input 데이터값 
       startPoint:'',
       endPoint:'',
+      // 실제 지도 객체
       map:Object,
+      // 출발점과 도착점 객체
       marker_s: Object,
       marker_e: Object,
+
       markerArr :[],
       labelArr : [],
     }
   },mounted(){
     this.makeMap();
-    this.initTmap();
+    // this.initTmap();
+    // this.findTarget();
   },
   methods:{
+    selected(item,idx,index){
+
+      let markerArr=this.markerArr;
+      let map=this.map;
+      let startIndex=this.startIndex;
+     
+      
+
+      if(idx==0){
+
+          if(startIndex>=0){
+            this.startMarker.setMap(null);
+            new Tmapv2.Marker({
+              position : new Tmapv2.LatLng(item.lat, item.lon),
+              icon : `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${startIndex}.png`,
+              iconSize : new Tmapv2.Size(24, 38),
+              map:map
+            });
+          }
+
+          this.startPointObject=item;
+          markerArr[index].setMap(null);
+          this.startMarker=new Tmapv2.Marker({
+            position : new Tmapv2.LatLng(item.lat, item.lon),
+            icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+            iconSize : new Tmapv2.Size(24, 38),
+            map:map
+          });
+          this.startIndex=index;
+
+      }else{
+        this.endPointObject=item;
+      }
+      
+    },
+    toggle(num){
+      if(num==0){
+        this.findStartPoint=true;
+        this.findEndPoint=false;
+        this.findRoute=false;
+      }else if(num==1){
+        this.findStartPoint=false;
+        this.findEndPoint=true;
+        this.findRoute=false;
+      }else{
+        this.findStartPoint=false;
+        this.findEndPoint=false;
+        this.findRoute=true;
+      }
+    },
     resetBoxes(){
       this.startPoint='';
       this.endPoint='';
@@ -96,8 +208,8 @@ export default {
             // 1. 지도 띄우기
       map = new Tmapv2.Map("map_div", {
         center: new Tmapv2.LatLng(37.56701114710962, 126.9973611831669),
-        width : "100%",
-        height : "400px",
+        width : "70vw",
+        height : "50vh",
         zoom : 15,
         zoomControl : true,
         scrollwheel : true
@@ -214,68 +326,115 @@ export default {
 						});
 					});
 		},
-    poiDetail(poiId) {
-				console.log(poiId);
+    findTarget() {
+      this.searchResult = []
+      let map=this.map;
+      let markerArr=this.markerArr;
+      let labelArr=this.labelArr;
+      let searchResult=this.searchResult;
+      let searchKeyword = $('#searchKeyword').val(); // 검색 키워드
 
-				$.ajax({
-					method : "GET", // 요청 방식
-					url : "https://apis.openapi.sk.com/tmap/pois/"
-							+ poiId // 상세보기를 누른 아이템의 POI ID
-							+ "?version=1&resCoordType=EPSG3857&format=json&callback=result&appKey="
-							+ "l7xx9b31967c4bc2496f8dde1d66747658c9", // 발급받은 Appkey
-					async : false, // 동기 설정
-					success : function(response) {
-						console.log(response);
+      $.ajax({
+        method : "GET", // 요청 방식
+        url : "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result", // url 주소
+        async : false, // 동기설정
+        data : { // 요청 데이터 정보
+          "appKey" : "l7xx9b31967c4bc2496f8dde1d66747658c9", // 발급받은 Appkey
+          "searchKeyword" : searchKeyword, // 검색 키워드
+          "resCoordType" : "EPSG3857", // 요청 좌표계
+          "reqCoordType" : "WGS84GEO", // 응답 좌표계
+          "count" : 10 // 가져올 갯수
+        },
+        success : function(response) {
+          var resultpoisData = response.searchPoiInfo.pois.poi;
 
-						// 응답받은 POI 정보
-						var detailInfo = response.poiDetailInfo;
-						var name = detailInfo.name;
-						var address = detailInfo.address;
+          // 2. 기존 마커, 팝업 제거
+          if (markerArr.length > 0) {
+            for(var i in markerArr) {
+              markerArr[i].setMap(null);
+            }
+            markerArr = [];
+          }
 
-						var noorLat = Number(detailInfo.frontLat);
-						var noorLon = Number(detailInfo.frontLon);
+          if (labelArr.length > 0) {
+            for (var i in labelArr) {
+              labelArr[i].setMap(null);
+            }
+            labelArr = [];
+          }
 
-						var pointCng = new Tmapv2.Point(noorLon, noorLat);
-						var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
-								pointCng);
+          //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+          var positionBounds = new Tmapv2.LatLngBounds();
+          var marker;
+          // searchResult=[];
+          // 3. POI 마커 표시
+          for (var k in resultpoisData) {
+            // POI 마커 정보 저장
+            var noorLat = Number(resultpoisData[k].noorLat);
+            var noorLon = Number(resultpoisData[k].noorLon);
+            var name = resultpoisData[k].name;
 
-						var lat = projectionCng._lat;
-						var lon = projectionCng._lng;
+            // POI 정보의 ID
+            var id = resultpoisData[k].id;
 
-            console.log('lat : '+lat)
-            console.log('lon : '+lon)
+            // 좌표 객체 생성
+            var pointCng = new Tmapv2.Point(
+                noorLon, noorLat);
 
-						var labelPosition = new Tmapv2.LatLng(lat, lon);
+            // EPSG3857좌표계를 WGS84GEO좌표계로 변환
+            var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+                pointCng);
 
-						// 상세보기 클릭 시 지도에 표출할 popup창
-						var content = "<div style=' border-radius:10px 10px 10px 10px;background-color:#2f4f4f; position: relative;"
-								+ "line-height: 15px; padding: 5 5px 2px 4; right:65px;'>"
-								+ "<div style='font-size: 11px; font-weight: bold ; line-height: 15px; color : white'>"
-								+ "name : "
-								+ name
-								+ "</br>"
-								+ "address : "
-								+ address + "</div>" + "</div>";
+            var lat = projectionCng._lat;
+            var lon = projectionCng._lng;
 
-						var labelInfo = new Tmapv2.Label({
-							position : labelPosition,
-							content : content,
-							map : map
-						});
-						//popup 생성
+            // 좌표 설정
+            var markerPosition = new Tmapv2.LatLng(
+                lat, lon);
 
-						// popup들을 담을 배열에 팝업 저장
-						labelArr.push(labelInfo);
-					},
-					error : function(request, status, error) {
-						console.log("code:" + request.status + "\n"
-								+ "message:" + request.responseText + "\n"
-								+ "error:" + error);
-					}
-				});
-			},
+            // Marker 설정
+            marker = new Tmapv2.Marker(
+              {
+                position : markerPosition, // 마커가 표시될 좌표
+                //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+                icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_"
+                    + k
+                    + ".png", // 아이콘 등록
+                iconSize : new Tmapv2.Size(
+                    24, 38), // 아이콘 크기 설정
+                title : name, // 마커 타이틀
+                map : map // 마커가 등록될 지도 객체
+              });
+
+            // 결과창에 나타날 검색 결과 html
+            searchResult.push({
+              id:id,
+              src:`http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${k}.png`,
+              name: name,
+              lat: lat,
+              lon: lon
+            })
+            // 마커들을 담을 배열에 마커 저장
+            markerArr.push(marker);
+            positionBounds.extend(markerPosition); // LatLngBounds의 객체 확장
+          }
+
+          //searchResult 결과값 노출
+          map.panToBounds(positionBounds); // 확장된 bounds의 중심으로 이동시키기
+          map.zoomOut();
+        },
+        error : function(request, status, error) {
+          console.log("code:"
+              + request.status + "\n"
+              + "message:"
+              + request.responseText
+              + "\n" + "error:" + error);
+        }
+      });
+    }   ,
     findRouteTmap(){
       var marker;
+      let startPointObject=this.startPointObject;
       var drawInfoArr = [];
 
       var map=this.map;
@@ -283,7 +442,7 @@ export default {
       // 시작, 도착 심볼찍기
       // 시작
       this.marker_s = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
+        position : new Tmapv2.LatLng(startPointObject.lat, startPointObject.lon),
         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
@@ -291,7 +450,7 @@ export default {
 
       // 도착
       this.marker_e = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(37.56445848334345, 127.00973587385866),
+        position : new Tmapv2.LatLng(endPointObject.lat, endPointObject.lon),
         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
@@ -442,24 +601,29 @@ export default {
       }
 	});
     },
-    addComma(num) {
-      var regexp = /\B(?=(\d{3})+(?!\d))/g;
-      return num.toString().replace(regexp, ',');
-		}
   }
 
 }
 </script>
 
 <style>
-    .findRoute{
-        background-color: #eaf2f9;
-        width: 100%;
-        height: 100vh;
-    }
+.test{
+  background-color: black;
+}
+  
+.findRoute{
+    background-color: #eaf2f9;
+    overflow:auto;
+    width: 100%;
+    height: 100vh;
+}
 
 .container {
-  display: inline;
+  display: inline-flex;
+  flex-direction: column;
+  width:80%;
+  padding-left: 20%;
+  
 }
 
 .banner {
@@ -468,21 +632,16 @@ export default {
   justify-content: center;
 }
 
-    .input-form{
-        width: 18vw;
-        height: 6vh;
-        font-size: larger;
-        margin-top: 3vh;
-        margin-bottom: 3vh;
-        margin-left: 4vw;
-        margin-right: 4vw;
-    }
 
-    .search{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.input-form{
+    width: 18vw;
+    height: 6vh;
+    font-size: larger;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    margin-left: 4vw;
+    margin-right: 4vw;
+}
 
 .search {
   display: flex;
@@ -536,23 +695,36 @@ export default {
   font-size: 100%;
 }
 
-    .roadMap{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 40vh;
-    }
 
-    .map{
-      width: 35%;
-      height: 100%;
-    }
+.map{
+  height: 55%;
+  margin-left: -10%;
+}
 
-    .stopover{
-      width: 30%;
-      height: 100%;
-      background-color: white;
-    }
+.buttonBoxes{
+  display: flex;
+  justify-content: center;
+}
+
+.content{
+  width:100%;
+  height: 450px;
+  display: flex;
+  background-color: white;
+}
+
+
+
+.inputBox{
+  border-right: 1px solid black;
+  width:25%;
+}
+
+.stopover{
+  width:35%;
+  padding-left: 2%;
+  background-color: white;
+}
 
 
 .buttons:active {
