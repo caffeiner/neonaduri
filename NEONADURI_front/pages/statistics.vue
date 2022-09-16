@@ -13,7 +13,7 @@
               width: 40vw;
             "
             :words="wordList"
-            :color="([, weight]) => weight > 10 ? 'DeepPink' : weight > 5 ? 'RoyalBlue' : 'Indigo'"
+            :color="([, weight]) => weight > 10 ? 'black' : weight > 5 ? 'RoyalBlue' : 'Indigo'"
             font-family="Roboto"
           />
 
