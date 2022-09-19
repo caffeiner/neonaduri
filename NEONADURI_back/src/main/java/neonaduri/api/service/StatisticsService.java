@@ -37,6 +37,8 @@ public class StatisticsService {
 ////        System.out.println("all = " + all);
 //        return null;
 ////        return all;
+//        return satisfactionRepository.findAll();
+
         return satisfactionRepository.findAll();
 
     }
