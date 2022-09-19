@@ -57,12 +57,12 @@
           <div class="inputBox">
 
             <b-input-group>
-              <b-form-input id="searchKeyword"  @keyup.enter="findTarget()" placeholder="시작점 검색"></b-form-input>
+              <b-form-input id="searchKeyword" placeholder="시작점 검색" @keyup.enter="findTarget()"></b-form-input>
               <b-input-group-append>
                 <b-button variant="outline-primary" @click="findTarget()">검색</b-button>
               </b-input-group-append>
             </b-input-group>
-            
+
             <div>
               {{startPointObject.name}}
             </div>
@@ -71,23 +71,31 @@
           </div>
 
           <!-- 3가지 형태()-->
-          <div class="stopover">
-            <div v-show="findStartPoint" style="border-right:1px solid black">
+          <div class="stopover" >
+            <div v-show="findStartPoint" style="border-right:1px solid black;">
               <ul id="searchResult" name="searchResult">
                 <div v-for="(item, index) in searchResult" :key="index">
                   {{index}}
                   {{startIndex}}
-                  <img :src="item.src" style='vertical-align:middle;'/><span>{{item.name}}</span> 
+                  <img :src="item.src" style='vertical-align:middle;'/><span>{{item.name}}</span>
                   <b-button variant='success' name='sendBtn' @click="selected(item,0,index)">시작점 설정</b-button>
                 </div>
               </ul>
             </div>
             <div v-show="findEndPoint" >
-              <b-button variant='success' name='sendBtn'>시작점 설정</b-button>
+              <ul id="searchResult" name="searchResult">
+                <div v-for="(item, index) in searchResult" :key="index">
+                  {{index}}
+                  {{endIndex}}
+                  <img :src="item.src" style='vertical-align:middle;'/><span>{{item.name}}</span>
+                  <b-button variant='success' name='sendBtn' @click="selected(item,1,index)">도착점 설정</b-button>
+                </div>
+              </ul>
             </div>
-            
+
             <!-- 경로찾기 -->
-            <div v-show="findRoute">
+            <!-- <div v-show="findRoute">
+              ``<img :src="startPointObject.src" style='vertical-align:middle;'/><span>{{startPointObject.name}}</span>
                 <p id="result"></p>
                 <select id="selectLevel">
                   <option value="0" selected="selected">교통최적+추천</option>
@@ -98,10 +106,28 @@
                 <button id="btn_select" type="button"  class="btn btn-primary" >적용하기</button>
                 <button @click="findRouteTmap()">눌러주세용ㅇㅇㅇㅇ</button>
                 <hr>
-            </div>
+            </div> -->
+          </div>
+
+          <div>
+              <!-- {{startPointObject.name}} -->
+              <img v-show="Object.keys(startPointObject).length!=0" src="http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png" style='vertical-align:middle;'/><span>{{startPointObject.name}}</span>
+              <div>{{startPointObject.lon}}</div>
+              <div>{{startPointObject.lat}}</div>
+              <hr>
+              <p id="result"></p>
+              <select id="selectLevel">
+                <option value="0" selected="selected">교통최적+추천</option>
+                <option value="1" >교통최적+무료우선</option>
+                <option value="2" >교통최적+최소시간</option>
+                <option value="3" >교통최적+초보</option>
+              </select>
+              <button id="btn_select" type="button"  class="btn btn-primary" >적용하기</button>
+              <button @click="findRouteTmap()">눌러주세용ㅇㅇㅇㅇ</button>
+              <hr>
+              <img v-show="Object.keys(endPointObject).length!=0" src="http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png" style='vertical-align:middle;'/><span>{{endPointObject.name}}</span>
           </div>
         </div>
-
 
     </div>
   </div>
@@ -123,15 +149,19 @@ export default {
     return{
       //검색결과 리스트
       searchResult:[],
+
       startPointObject:{},
       startIndex:-1,
       startMarker:Object,
+
       endPointObject:{},
+      endIndex:-1,
+      endMarker:Object,
       // 페이지 보이기
       findStartPoint:true,
       findEndPoint:false,
       findRoute:false,
-      // input 데이터값 
+      // input 데이터값
       startPoint:'',
       endPoint:'',
       // 실제 지도 객체
@@ -151,26 +181,17 @@ export default {
   methods:{
     selected(item,idx,index){
 
-      let markerArr=this.markerArr;
       let map=this.map;
-      let startIndex=this.startIndex;
-     
-      
+      let startPointObject=this.startPointObject;
+
+
 
       if(idx==0){
-
-          if(startIndex>=0){
+          if(Object.keys(startPointObject).length!=0){
             this.startMarker.setMap(null);
-            new Tmapv2.Marker({
-              position : new Tmapv2.LatLng(item.lat, item.lon),
-              icon : `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${startIndex}.png`,
-              iconSize : new Tmapv2.Size(24, 38),
-              map:map
-            });
           }
 
           this.startPointObject=item;
-          markerArr[index].setMap(null);
           this.startMarker=new Tmapv2.Marker({
             position : new Tmapv2.LatLng(item.lat, item.lon),
             icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
@@ -180,9 +201,20 @@ export default {
           this.startIndex=index;
 
       }else{
-        this.endPointObject=item;
+        if(Object.keys(this.endPointObject).length!=0){
+            this.endMarker.setMap(null);
+          }
+
+          this.endPointObject=item;
+          this.endMarker=new Tmapv2.Marker({
+            position : new Tmapv2.LatLng(item.lat, item.lon),
+            icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+            iconSize : new Tmapv2.Size(24, 38),
+            map:map
+          });
+          this.endIndex=index;
       }
-      
+
     },
     toggle(num){
       if(num==0){
@@ -330,7 +362,6 @@ export default {
       this.searchResult = []
       let map=this.map;
       let markerArr=this.markerArr;
-      let labelArr=this.labelArr;
       let searchResult=this.searchResult;
       let searchKeyword = $('#searchKeyword').val(); // 검색 키워드
 
@@ -347,20 +378,14 @@ export default {
         },
         success : function(response) {
           var resultpoisData = response.searchPoiInfo.pois.poi;
-
+          console.log(markerArr);
           // 2. 기존 마커, 팝업 제거
           if (markerArr.length > 0) {
             for(var i in markerArr) {
               markerArr[i].setMap(null);
             }
-            markerArr = [];
-          }
-
-          if (labelArr.length > 0) {
-            for (var i in labelArr) {
-              labelArr[i].setMap(null);
-            }
-            labelArr = [];
+            // markerArr.clear();
+            this.markerArr = [];
           }
 
           //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
@@ -433,67 +458,57 @@ export default {
       });
     }   ,
     findRouteTmap(){
-      var marker;
-      let startPointObject=this.startPointObject;
+
       var drawInfoArr = [];
+
 
       var map=this.map;
 
       // 시작, 도착 심볼찍기
       // 시작
-      this.marker_s = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(startPointObject.lat, startPointObject.lon),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-        iconSize : new Tmapv2.Size(24, 38),
-        map:map
-      });
+      this.marker_s = this.startMarker;
 
       // 도착
-      this.marker_e = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(endPointObject.lat, endPointObject.lon),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
-        iconSize : new Tmapv2.Size(24, 38),
-        map:map
-      });
+      this.marker_e = this.endMarker;
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.56626352138058, 126.98735015742581),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_1.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_1.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.56568310756034, 127.00221495976581),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_2.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_2.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.570369, 126.992153),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_3.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_3.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.56335290252303, 127.00352387777271),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_4.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_4.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.570721714117965, 127.00186090818215),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_5.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_5.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
 
-      marker = new Tmapv2.Marker({
+      new Tmapv2.Marker({
         position : new Tmapv2.LatLng(37.56515390827723, 126.99066536776698),
-        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_6.png",
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_6.png",
         iconSize : new Tmapv2.Size(24, 38),
         map:map
       });
@@ -501,6 +516,22 @@ export default {
       var headers = {};
       headers["appKey"]="	l7xx9b31967c4bc2496f8dde1d66747658c9";
 
+      // let dataInfo={
+      //   "reqCoordType": "WGS84GEO",
+      //   "resCoordType" : "EPSG3857",
+      //   "startName": "출발",
+      //   "startX": startPointObject.lon,
+      //   "startY": startPointObject.lat,
+      //   "startTime": "201711121314",
+      //   "endName": "도착",
+      //   "endX": endPointObject.lon,
+      //   "endY": endPointObject.lat,
+      //   "searchOption" : "0",
+      // };
+
+      let viaPoints=[];
+      console.log("longtitude : "+this.startPointObject.lon);
+      console.log("latitude : "+this.startPointObject.lat);
       $.ajax({
         type:"POST",
         headers : headers,
@@ -511,12 +542,12 @@ export default {
               "reqCoordType": "WGS84GEO",
               "resCoordType" : "EPSG3857",
               "startName": "출발",
-              "startX": "126.98605733268329",
-              "startY": "37.568085523663385",
+              "startX": this.startPointObject.lon,
+              "startY": this.startPointObject.lat,
               "startTime": "201711121314",
               "endName": "도착",
-              "endX": "127.00973587385866",
-              "endY": "37.56445848334345",
+              "endX": this.endPointObject.lon,
+              "endY": this.endPointObject.lat,
               "searchOption" : "0",
               "viaPoints": [
                 {
@@ -610,7 +641,7 @@ export default {
 .test{
   background-color: black;
 }
-  
+
 .findRoute{
     background-color: #eaf2f9;
     overflow:auto;
@@ -623,7 +654,7 @@ export default {
   flex-direction: column;
   width:80%;
   padding-left: 20%;
-  
+
 }
 
 .banner {
@@ -724,6 +755,7 @@ export default {
   width:35%;
   padding-left: 2%;
   background-color: white;
+  overflow-y:scroll;
 }
 
 
