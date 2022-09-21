@@ -43,10 +43,8 @@ export default {
 
       this.timer = setTimeout(() => {
         if (e.wheelDeltaY > 0) {
-          console.log('333333')
           this.prevSlide()
         } else if (e.wheelDeltaY < 0) {
-          console.log('444444')
           this.nextSlide()
         }
       }, 50)
