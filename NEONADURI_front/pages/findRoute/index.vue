@@ -269,10 +269,6 @@ export default {
         this.findEndPoint = true
       }
     },
-    resetBoxes() {
-      this.startPoint = ''
-      this.endPoint = ''
-    },
     // 지도 그리기
     makeMap() {
       let map
