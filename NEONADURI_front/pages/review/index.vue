@@ -138,7 +138,6 @@
     <navbar-component></navbar-component>
   </div>
 </template>
-
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
