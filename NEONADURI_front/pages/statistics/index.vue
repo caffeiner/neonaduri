@@ -16,7 +16,7 @@
         style="width: 600px; height: 400px"
       >
         <div id="krMap">
-
+          지도넣기
         </div>
       </div>
       <div v-if="statisticsClass === 'object'" id="wordCloud">
@@ -167,13 +167,15 @@ export default {
     },
     mapopen(){
 
+
       const chartDom = document.getElementById('krMap');
       const myChart = echarts.init(chartDom);
       let option;
 
-
       myChart.showLoading();
-      axios.get('/data/asset/geo/USA.json').then(function (usaJson) {
+      axios.get('/data/asset/geo/USA.json').then( function (usaJson) {
+
+        console.log(JSON.stringify(usaJson,null,2))
         myChart.hideLoading();
         echarts.registerMap('USA', usaJson, {
           Alaska: {
@@ -306,6 +308,9 @@ export default {
         };
         myChart.setOption(option);
       });
+
+      option && myChart.setOption(option);
+
     }
   },
 }
