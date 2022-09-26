@@ -65,26 +65,31 @@ export default {
         ['하이요', 4],
         ['히히히히히힣', 11],
       ],
-      fontSizeMapper: (word) => Math.log2(word.value) * 5,
+      priceList:[],
+      foodList:[],
+      natureList:[],
     }
   },
   computed: {
     ...mapState('statistics', [
       'words',
-      'priceList',
-      'foodList',
-      'natureList',
+      // 'priceList',
+      // 'foodList',
+      // 'natureList',
       'regionList',
+      'satList',
     ]),
   },
   created() {
     this.callSatList()
     this.callSelList()
     this.callVisitedList()
+    // this.test()
   },
   mounted() {
     // Initialize the echarts instance based on the prepared dom
     this.mapopen();
+    this.statisticsChange();
   },
   methods: {
     ...mapActions('statistics', [
@@ -93,12 +98,24 @@ export default {
       'callVisitedList',
     ]),
     statisticsChange() {
+      // data 분류
+      this.satList.forEach((element)=>{
+          if(element.satType ==='0'){
+            this.priceList.push(element.satScore);
+          }else if(element.satType==='1'){
+            this.foodList.push(element.satScore);
+          }if(element.satType==='2'){
+            this.natureList.push(element.satScore);
+          }
+      })
+
+
+
       if (this.statisticsClass === 'satisfaction') {
         const myChart = echarts.init(document.getElementById('main'), null, {
           width: 1000,
           height: 500,
         })
-
         // Specify the configuration items and data for the chart
         const option = {
           tooltip: {},
@@ -131,7 +148,7 @@ export default {
             {
               type: 'value',
               name: 'percent',
-              min: 0,
+              min: 60,
               max: 100,
               position: 'left',
               axisLabel: {
@@ -175,7 +192,7 @@ export default {
       myChart.showLoading();
       axios.get('/data/asset/geo/USA.json').then( function (usaJson) {
 
-        console.log(JSON.stringify(usaJson,null,2))
+        // console.log(JSON.stringify(usaJson,null,2))
         myChart.hideLoading();
         echarts.registerMap('USA', usaJson, {
           Alaska: {
