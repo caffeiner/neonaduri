@@ -65,6 +65,7 @@ export default {
         ['하이요', 4],
         ['히히히히히힣', 11],
       ],
+      fontSizeMapper: (word) => Math.log2(word.value) * 5,
       priceList:[],
       foodList:[],
       natureList:[],
