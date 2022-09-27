@@ -11,9 +11,7 @@ public class NeonaduriApplication {
             + "classpath:application.yaml,"
             + "classpath:aws.yml";
     public static void main(String[] args) {
-        new SpringApplicationBuilder(NeonaduriApplication.class)
-                .properties(APPLICATION_LOCATIONS)
-                .run(args);
+        SpringApplication.run(NeonaduriApplication.class, args);
     }
 
 }
