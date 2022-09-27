@@ -1,7 +1,7 @@
 <template>
   <div class="statistics">
     <div class="banner-container">
-      <img src="/banner/statistics-banner.png" alt="banner" class="banner" />
+      <img src="/banner/statistics-logo-star.png" alt="banner" class="banner" />
     </div>
     <div class="white-back slide-in-right">
       <b-form-select
@@ -20,14 +20,17 @@
         </div>
       </div>
       <div v-if="statisticsClass === 'object'" id="wordCloud">
+        <!-- <div id="mainCloud"></div> -->
         <vue-word-cloud
           style="height: 40vh; width: 80vw"
-          :words="wordList"
+          :words="words"
           :color="
-            ([, weight]) =>
-              weight > 10 ? 'black' : weight > 5 ? 'RoyalBlue' : 'Indigo'
+            ([, selPercent]) =>
+              colorPick(selPercent)
           "
-          font-family="Roboto"
+          font-family="GmarketSansMedium"
+          font-size-ratio	= 5
+
         />
       </div>
       <div v-if="statisticsClass === 'satisfaction'">
@@ -39,9 +42,9 @@
 
 <script>
 import * as echarts from 'echarts' // echart를 전역으로 불러옴
+// import eword from 'echarts-wordcloud'
 import VueWordCloud from 'vuewordcloud'
 import axios from 'axios'
-// import axios from 'axios';
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -57,26 +60,25 @@ export default {
         { value: 'satisfaction', text: '만족도' },
       ],
       statisticsClass: 'sightNum',
-      wordList: [
-        ['romance', 10.4],
-        ['horror', 3],
-        ['fantasy', 7],
-        ['adventure', 3],
-        ['하이요', 4],
-        ['히히히히히힣', 11],
-      ],
+      // wordList: [
+      //   ['romance', 10.4],
+      //   ['horror', 3],
+      //   ['fantasy', 7],
+      //   ['adventure', 3],
+      //   ['하이요', 4],
+      //   ['히히히히히힣', 11],
+      // ],
       fontSizeMapper: (word) => Math.log2(word.value) * 5,
       priceList:[],
       foodList:[],
       natureList:[],
+
+      colorIndex:4,
     }
   },
   computed: {
     ...mapState('statistics', [
       'words',
-      // 'priceList',
-      // 'foodList',
-      // 'natureList',
       'regionList',
       'satList',
     ]),
@@ -91,6 +93,7 @@ export default {
     // Initialize the echarts instance based on the prepared dom
     this.mapopen();
     this.statisticsChange();
+    // this.visitedWords();
   },
   methods: {
     ...mapActions('statistics', [
@@ -109,8 +112,6 @@ export default {
             this.natureList.push(element.satScore);
           }
       })
-
-
 
       if (this.statisticsClass === 'satisfaction') {
         const myChart = echarts.init(document.getElementById('main'), null, {
@@ -329,18 +330,199 @@ export default {
 
       option && myChart.setOption(option);
 
-    }
+    },
+    colorPick(selPercent){
+      // const colorArr=["#F24D98","#813B7C","#59D044","#F3A002","#F2F44D"]
+      // const colorArr=["#3F6F76","#69B7CE","#C65840","#F4CE4B","#62496F"]
+      // const colorArr=["#4368B6","#78A153","#DEC23B","#E4930A","#C53211"]
+      // const colorArr=["#C1395E","#AEC17B","#F0CA50","#E07B42","#89A7C2"]
+      // const colorArr=["#21344F","#8AAD05","#E2CE1B","#DF5D22","#E17976"]
+      const colorArr=["#C13E43","#376EA5","#565654","#F9D502","#E7CA6B"]
+      if(selPercent>10){
+        this.colorIndex=(this.colorIndex+1)%5;
+      }else{
+        this.colorIndex=(this.colorIndex+1)%5;
+      }
+      return colorArr[this.colorIndex]
+    },
+    // makeWordCloud(){
+    //   const chart = echarts.init(document.getElementById('mainCloud'));
+
+    //   const option = {
+    //       tooltip: {},
+    //         title : {
+    //         text: 'Red - Already Over - Lyrics',
+    //       },
+    //       toolbox: {
+    //         feature: {
+    //           saveAsImage: {}
+    //         }
+    //       },
+    //               series: [ {
+    //                   type: 'wordCloud',
+    //                   gridSize: 3,
+    //                   sizeRange: [15, 55],
+    //                   rotationRange: [-45, 45],
+    //                   shape: 'pentagon',
+    //                   width: 600,
+    //                   height: 400,
+    //                   textStyle: {
+    //                       normal: {
+    //                           color() {
+    //                               return 'rgb(' + [
+    //                                   Math.round(Math.random() * 160),
+    //                                   Math.round(Math.random() * 160),
+    //                                   Math.round(Math.random() * 160)
+    //                               ].join(',') + ')';
+    //                           }
+    //                       },
+    //                       emphasis: {
+    //                           shadowBlur: 10,
+    //                           shadowColor: '#333'
+    //                       }
+    //                   },
+    //                   data: [
+    //                       {
+    //                           name: 'Already Over',
+    //                           value: 10000,
+    //                           textStyle: {
+    //                               normal: {
+    //                                   color: 'black'
+    //                               },
+    //                               emphasis: {
+    //                                   color: 'blue'
+    //                               }
+    //                           }
+    //                       },
+    //                       {
+    //                           name: 'now',
+    //                           value: 4055
+    //                       },
+    //                       {
+    //                           name: 'know',
+    //                           value: 2467
+    //                       },
+    //                       {
+    //                           name: 'reaching',
+    //                           value: 2244
+    //                       },
+    //                       {
+    //                           name: 'nothing',
+    //                           value: 1898
+    //                       },
+    //                       {
+    //                           name: 'letting',
+    //                           value: 1484
+    //                       },
+    //                       {
+    //                           name: 'fall',
+    //                           value: 1112
+    //                       },
+    //                       {
+    //                           name: 'give',
+    //                           value: 965
+    //                       },
+    //                       {
+    //                           name: 'loving',
+    //                           value: 847
+    //                       },
+    //                       {
+    //                           name: 'go',
+    //                           value: 582
+    //                       },
+    //                       {
+    //                           name: 'left',
+    //                           value: 555
+    //                       },
+    //                       {
+    //                           name: 'lose',
+    //                           value: 550
+    //                       },
+    //                       {
+    //                           name: 'everything',
+    //                           value: 462
+    //                       },
+    //                       {
+    //                           name: 'never',
+    //                           value: 366
+    //                       },
+    //                       {
+    //                           name: 'breaking',
+    //                           value: 360
+    //                       },
+    //                       {
+    //                           name: 'slowly',
+    //                           value: 282
+    //                       },
+    //                       {
+    //                           name: 'all',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'here',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'skin',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'you',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'resist',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'again',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'suffocating',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'defense',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'cost',
+    //                           value: 273
+    //                       },
+    //                       {
+    //                           name: 'fading',
+    //                           value: 265
+    //                       }
+    //                   ]
+    //               } ]
+    //           };
+
+    //           chart.setOption(option);
+
+    //           window.onresize = chart.resize;
+    // }
   },
 }
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 .banner-container {
   display: flex;
   justify-content: center;
 }
 .banner {
-  width: 24%;
+  width: 30%;
+  margin-bottom: -2vh;
 }
 .slide-in-right {
   -webkit-animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -392,7 +574,8 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 130%;
   width: 100%;
-  height: 80vh;
+  height: 70vh;
+
 }
 
 .map {
