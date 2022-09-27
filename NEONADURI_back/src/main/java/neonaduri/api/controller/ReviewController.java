@@ -1,20 +1,18 @@
 package neonaduri.api.controller;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import lombok.RequiredArgsConstructor;
 import neonaduri.api.service.ReviewService;
 import neonaduri.dto.request.CreateReviewReq;
-import neonaduri.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import neonaduri.dto.request.ModifyReviewReq;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +26,18 @@ public class ReviewController {
     public ResponseEntity<HttpStatus> createReview(@Valid @RequestBody CreateReviewReq createReviewReq) {
         reviewService.postReview(createReviewReq);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<HttpStatus> modifyReview(@Valid @RequestBody ModifyReviewReq modifyReviewReq) {
+        reviewService.putReview(modifyReviewReq);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/pass/{reviewId}/{password}")
+    public ResponseEntity<?> confirmPassword(@PathVariable("reviewId") Long reviewId, @PathVariable("password") String password) {
+        return new ResponseEntity<>(reviewService.comparePass(reviewId,password),HttpStatus.OK);
     }
 
 }
