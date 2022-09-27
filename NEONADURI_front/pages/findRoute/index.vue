@@ -133,7 +133,6 @@
 // import {mapState} from 'vuex'
 import axios from 'axios'
 
-
 export default {
   data() {
     return {
@@ -198,8 +197,8 @@ export default {
       labelArr: [],
       resultMarkerArr: [],
 
-      changedStart:Object,
-      changedEnd:Object,
+      changedStart: Object,
+      changedEnd: Object,
     }
   },
   mounted() {
@@ -305,7 +304,7 @@ export default {
             reqCoordType: 'WGS84GEO', // 응답 좌표계
             count: 10, // 가져올 갯수
           },
-          success (response) {
+          success(response) {
             const resultpoisData = response.searchPoiInfo.pois.poi
 
             // 2. 기존 마커, 팝업 제거
@@ -381,7 +380,7 @@ export default {
             map.panToBounds(positionBounds) // 확장된 bounds의 중심으로 이동시키기
             map.zoomOut()
           },
-          error (request, status, error) {
+          error(request, status, error) {
             console.log(
               'code:' +
                 request.status +
@@ -417,7 +416,7 @@ export default {
           reqCoordType: 'WGS84GEO', // 응답 좌표계
           count: 10, // 가져올 갯수
         },
-        success (response) {
+        success(response) {
           const resultpoisData = response.searchPoiInfo.pois.poi
           // 2. 기존 마커, 팝업 제거
           if (markerArr.length > 0) {
@@ -446,9 +445,8 @@ export default {
             const pointCng = new Tmapv2.Point(noorLon, noorLat)
 
             // EPSG3857좌표계를 WGS84GEO좌표계로 변환
-            const projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
-              pointCng
-            )
+            const projectionCng =
+              new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(pointCng)
 
             const lat = projectionCng._lat
             const lon = projectionCng._lng
@@ -486,7 +484,7 @@ export default {
           map.panToBounds(positionBounds) // 확장된 bounds의 중심으로 이동시키기
           map.zoomOut()
         },
-        error (request, status, error) {
+        error(request, status, error) {
           console.log(
             'code:' +
               request.status +
@@ -503,38 +501,34 @@ export default {
 
     // 길찾기
     async findRouteTmap() {
-
-      for(let i in this.markerArr){
-        this.markerArr[i].setMap(null);
+      for (let i in this.markerArr) {
+        this.markerArr[i].setMap(null)
       }
 
-      
-      if(this.resultInfoArr.length > 0){
-        this.changedStart.setMap(null);
-        this.changedEnd.setMap(null);
+      if (this.resultInfoArr.length > 0) {
+        this.changedStart.setMap(null)
+        this.changedEnd.setMap(null)
       }
-      
-       this.changedStart=new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(
-            this.startPointObject.lat,
-            this.startPointObject.lon
-          ),
-          icon:
-            'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_s.png',
-          iconSize: new Tmapv2.Size(24, 38),
-          map: this.map,
-        })
 
-        this.changedEnd=new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(
-            this.endPointObject.lat,
-            this.endPointObject.lon
-          ),
-          icon:
-            'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_e.png',
-          iconSize: new Tmapv2.Size(24, 38),
-          map: this.map,
-        })
+      this.changedStart = new Tmapv2.Marker({
+        position: new Tmapv2.LatLng(
+          this.startPointObject.lat,
+          this.startPointObject.lon
+        ),
+        icon: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_s.png',
+        iconSize: new Tmapv2.Size(24, 38),
+        map: this.map,
+      })
+
+      this.changedEnd = new Tmapv2.Marker({
+        position: new Tmapv2.LatLng(
+          this.endPointObject.lat,
+          this.endPointObject.lon
+        ),
+        icon: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_e.png',
+        iconSize: new Tmapv2.Size(24, 38),
+        map: this.map,
+      })
 
       const headers = {}
       headers.appKey = '	l7xx9b31967c4bc2496f8dde1d66747658c9'
@@ -567,24 +561,26 @@ export default {
       }
 
       dataInfo.viaPoints = viaPoints
-      let resultData = null;
-      let resultFeatures = null;
-      await axios.post('https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',JSON.stringify(dataInfo),{headers})
-      .then(function(response){
-        resultData=response.data.properties
-        resultFeatures = response.data.features
-      })
+      let resultData = null
+      let resultFeatures = null
+      await axios
+        .post(
+          'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
+          JSON.stringify(dataInfo),
+          { headers }
+        )
+        .then(function (response) {
+          resultData = response.data.properties
+          resultFeatures = response.data.features
+        })
 
-      console.log(JSON.stringify(resultData,null,2))
-      console.log(JSON.stringify(resultFeatures,null,2))
+      console.log(JSON.stringify(resultData, null, 2))
+      console.log(JSON.stringify(resultFeatures, null, 2))
 
       // 결과 출력
       const tDistance =
-        '총 거리 : ' +
-        (resultData.totalDistance / 1000).toFixed(1) +
-        'km,  '
-      const tTime =
-        '총 시간 : ' + (resultData.totalTime / 60).toFixed(0) + '분'
+        '총 거리 : ' + (resultData.totalDistance / 1000).toFixed(1) + 'km,  '
+      const tTime = '총 시간 : ' + (resultData.totalTime / 60).toFixed(0) + '분'
       $('#result').text(tDistance + tTime)
 
       // 기존의 길과 포인트들 전부 삭제
@@ -608,7 +604,7 @@ export default {
       for (let i in resultFeatures) {
         const geometry = resultFeatures[i].geometry
         const properties = resultFeatures[i].properties
-        let polyline_;
+        let polyline_
 
         if (geometry.type == 'LineString') {
           for (const j in geometry.coordinates) {
@@ -662,14 +658,12 @@ export default {
             geometry.coordinates[1]
           )
           // 포인트 객체를 받아 좌표값으로 다시 변환
-          const convertPoint =
-            new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(latlon)
+          const convertPoint = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
+            latlon
+          )
 
           const marker_p = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(
-              convertPoint._lat,
-              convertPoint._lng
-            ),
+            position: new Tmapv2.LatLng(convertPoint._lat, convertPoint._lng),
             icon: markerImg,
             iconSize: size,
             map: this.map,
@@ -678,8 +672,6 @@ export default {
           this.resultMarkerArr.push(marker_p)
         }
       }
-
-
     },
     // 경유지 지우기
     deleteStopOver(index) {
