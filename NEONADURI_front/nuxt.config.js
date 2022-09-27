@@ -27,8 +27,14 @@ export default {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js',
       },
       {
-        src: 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9'
-      }
+        src: 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9',
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js',
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/@yaireo/tagify',
+      },
     ],
   },
 
@@ -36,7 +42,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/persistedState.js' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -54,13 +60,25 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'bootstrap-vue/nuxt',
+    'nuxt-vuex-localstorage',
+    'cookie-universal-nuxt',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
+<<<<<<< HEAD
     proxy:true
+=======
+    proxy: true,
+  },
+  proxy:{
+    '/data':{
+      target: 'https://echarts.apache.org/examples'
+    }
+>>>>>>> d492c1755a1275f8e017e59e4e62095f02b5da4c
   },
 
   proxy:{
@@ -71,4 +89,3 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
-
