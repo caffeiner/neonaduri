@@ -3,7 +3,6 @@ package neonaduri.api.service;
 import lombok.RequiredArgsConstructor;
 import neonaduri.api.repository.ReviewRepository;
 import neonaduri.api.repository.SpotRepository;
-import neonaduri.api.repository.TagRepository;
 import neonaduri.domain.Review;
 import neonaduri.domain.Tag;
 import neonaduri.dto.request.CreateReviewReq;
