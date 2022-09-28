@@ -27,7 +27,6 @@ export const mutations = {
       })
     },
     SET_VISITED(state, payload){
-      state.regionList=payload
 
       state.introData.maxValue=0;
       state.introData.minValue=payload[0].visitedNum
@@ -77,8 +76,8 @@ export const actions = {
             }
         )
     },
-    callVisitedList({commit}){
-        getVisited(
+    async callVisitedList({commit}){
+        await getVisited(
             ({data})=>{
                 commit('SET_VISITED',data)
             },

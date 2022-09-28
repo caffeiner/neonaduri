@@ -21,13 +21,9 @@
         <vue-word-cloud
           style="height: 40vh; width: 70vw"
           :words="words"
-          :color="
-            ([, selPercent]) =>
-              colorPick(selPercent)
-          "
+          :color="([, selPercent]) => colorPick(selPercent)"
           font-family="GmarketSansMedium"
-          font-size-ratio	= 5
-
+          font-size-ratio="5"
         />
       </div>
       <div v-if="statisticsClass === 'satisfaction'">
@@ -51,15 +47,10 @@
 
 <script>
 import * as echarts from 'echarts' // echart를 전역으로 불러옴
-// import eword from 'echarts-wordcloud'
 import VueWordCloud from 'vuewordcloud'
-// import axios from 'axios';
-// import krJson from '~/static/map/koreaMap.json'
 import { mapActions, mapState } from 'vuex'
 
-
 export default {
-
   name: '',
   components: {
     [VueWordCloud.name]: VueWordCloud,
@@ -77,7 +68,7 @@ export default {
       foodList:[],
       natureList:[],
 
-      colorIndex:4,
+      colorIndex: 4,
 
     }
   },
@@ -90,17 +81,17 @@ export default {
       'introData' // 지도의 범례를 위한 값. 최대값과 최솟값 가짐
     ]),
   },
-  created() {
-
+  async created() {
     this.callSatList()
     this.callSelList()
-    this.callVisitedList()
+    await this.callVisitedList()
     // this.test()
+    this.mapopen()
+    this.statisticsChange()
   },
   mounted() {
     // Initialize the echarts instance based on the prepared dom
-    this.mapopen();
-    this.statisticsChange();
+
     // this.visitedWords();
     // this.drawMap();
   },
@@ -112,14 +103,15 @@ export default {
     ]),
     statisticsChange() {
       // data 분류
-      this.satList.forEach((element)=>{
-          if(element.satType ==='0'){
-            this.priceList.push(element.satScore);
-          }else if(element.satType==='1'){
-            this.foodList.push(element.satScore);
-          }if(element.satType==='2'){
-            this.natureList.push(element.satScore);
-          }
+      this.satList.forEach((element) => {
+        if (element.satType === '0') {
+          this.priceList.push(element.satScore)
+        } else if (element.satType === '1') {
+          this.foodList.push(element.satScore)
+        }
+        if (element.satType === '2') {
+          this.natureList.push(element.satScore)
+        }
       })
 
       if (this.statisticsClass === 'satisfaction') {
@@ -218,7 +210,7 @@ export default {
         tooltip: {
           trigger: 'item',
           showDelay: 0,
-          transitionDuration: 0.2
+          transitionDuration: 0.2,
         },
         visualMap: {
           left: 'right',
@@ -237,11 +229,11 @@ export default {
               '#fdae61',
               '#f46d43',
               '#d73027',
-              '#a50026'
-            ]
+              '#a50026',
+            ],
           },
           text: ['High', 'Low'],
-          calculable: true
+          calculable: true,
         },
         // toolbox: {
         //   show: true,
@@ -272,22 +264,22 @@ export default {
 
       option && myChart2.setOption(option);
 
+      // console.log(JSON.stringify(myChart2.getOption(),null,2))
     },
-    colorPick(selPercent){
+    colorPick(selPercent) {
       // const colorArr=["#F24D98","#813B7C","#59D044","#F3A002","#F2F44D"]
       // const colorArr=["#3F6F76","#69B7CE","#C65840","#F4CE4B","#62496F"]
       // const colorArr=["#4368B6","#78A153","#DEC23B","#E4930A","#C53211"]
       // const colorArr=["#C1395E","#AEC17B","#F0CA50","#E07B42","#89A7C2"]
       // const colorArr=["#21344F","#8AAD05","#E2CE1B","#DF5D22","#E17976"]
-      const colorArr=["#C13E43","#376EA5","#565654","#F9D502","#E7CA6B"]
-      if(selPercent>10){
-        this.colorIndex=(this.colorIndex+1)%5;
-      }else{
-        this.colorIndex=(this.colorIndex+1)%5;
+      const colorArr = ['#C13E43', '#376EA5', '#565654', '#F9D502', '#E7CA6B']
+      if (selPercent > 10) {
+        this.colorIndex = (this.colorIndex + 1) % 5
+      } else {
+        this.colorIndex = (this.colorIndex + 1) % 5
       }
       return colorArr[this.colorIndex]
     },
-
   },
 }
 </script>
@@ -300,7 +292,6 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-
 
 .banner-container {
   display: flex;
@@ -362,7 +353,6 @@ export default {
   background-size: 100% 100%;
   width: 100%;
   height: 70vh;
-
 }
 
 .map {
@@ -384,9 +374,6 @@ export default {
   justify-content: space-evenly;
 }
 
-.buttons{
-
-}
 
 
 #main {
@@ -401,20 +388,6 @@ export default {
   bottom: 20vh;
   left: 20vh;
 }
-/* .map-wrapper {
-  position:relative;
-  text-align: center;
-}
-.background {
-  /* fill: #021019; */
-  /* fill: transparent;
-  pointer-events: all;
-}
-  
-.map-layer {
-  fill: #08304b;
-  stroke: #021019;
-  stroke-width: 1px;
-} */ 
+
 
 </style>
