@@ -1,6 +1,6 @@
 <template>
   <div class="findRoute">
-    <div class="container">
+    <div class="route-container">
       <!-- <div class="banner">
               <img src="/banner/banner.png" style="width: 50%;">
           </div> -->
@@ -144,6 +144,9 @@ export default {
     script: [
       {
         src: 'https://kit.fontawesome.com/301da58328.js',
+      },
+      {
+        src: 'https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=l7xx9b31967c4bc2496f8dde1d66747658c9',
       },
     ],
   },
@@ -760,7 +763,7 @@ export default {
   height: 100vh;
 }
 
-.container {
+.route-container {
   display: inline-flex;
   flex-direction: column;
   width: 1vw;

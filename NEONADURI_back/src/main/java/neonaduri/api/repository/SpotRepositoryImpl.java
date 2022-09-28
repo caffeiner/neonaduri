@@ -64,7 +64,7 @@ public class SpotRepositoryImpl implements SpotRepositoryCustom{
                 .select(
                         Projections.constructor(SearchSpotDto.class,
                                 spot.spotId,
-                                spot.spotName, //spot/AC01
+                                spot.spotImage, //spot/AC01
                                 spot.spotContent,
                                 spot.spotName,
                                 spot.lat,
@@ -78,8 +78,6 @@ public class SpotRepositoryImpl implements SpotRepositoryCustom{
                         spotSigunguEq(searchSpotReq.getSigungu()),
                         spotSidoEq(searchSpotReq.getSido()),
                         spotClassIn(searchSpotReq.getClassification()));
-
-        content.stream().forEach(spot -> spot.setSpotImage(amazonS3Client.getUrl("neonaduri",spot.getSpotImage()).toString()));
 
         return PageableExecutionUtils.getPage(content,pageable,countQuery::fetchCount);
     }
