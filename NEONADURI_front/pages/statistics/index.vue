@@ -48,6 +48,11 @@
 <script>
 import * as echarts from 'echarts' // echart를 전역으로 불러옴
 import VueWordCloud from 'vuewordcloud'
+<<<<<<< HEAD
+=======
+// import axios from 'axios';
+// import krJson from '~/static/map/koreaMap.json'
+>>>>>>> 8ff840c623d040d198538e4e9a267f775e087892
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -192,6 +197,7 @@ export default {
       // const kr
       const geoJson=this.koreaMap;
 
+      myChart2.showLoading()
 
       myChart2.showLoading();
 
@@ -388,6 +394,24 @@ export default {
   bottom: 20vh;
   left: 20vh;
 }
+<<<<<<< HEAD
 
+=======
+/* .map-wrapper {
+  position:relative;
+  text-align: center;
+}
+.background {
+  /* fill: #021019; */
+  /* fill: transparent;
+  pointer-events: all;
+}
+
+.map-layer {
+  fill: #08304b;
+  stroke: #021019;
+  stroke-width: 1px;
+} */ 
+>>>>>>> 8ff840c623d040d198538e4e9a267f775e087892
 
 </style>
