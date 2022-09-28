@@ -1,10 +1,5 @@
 <template>
   <div class="statistics">
-<<<<<<< HEAD
-    <div class="white-back">
-      <div class="map">
-        <div id="myMap" style="width: 600px; height: 400px">
-=======
     <div class="banner-container">
       <img src="/banner/statistics-logo-star.png" alt="banner" class="banner" />
     </div>
@@ -18,12 +13,9 @@
       <div
         v-if="statisticsClass === 'sightNum'"
         id="myMap"
-        style="width: 600px; height: 400px"
-      >
-        <div id="krMap">
-          지도넣기
->>>>>>> d492c1755a1275f8e017e59e4e62095f02b5da4c
-        </div>
+        style="width: 800px; height: 800px"
+      > 
+      <button @click="mapopen()">얹어보자 </button>
       </div>
       <div v-if="statisticsClass === 'object'" id="wordCloud">
         <!-- <div id="mainCloud"></div> -->
@@ -51,16 +43,12 @@ import * as echarts from 'echarts' // echart를 전역으로 불러옴
 // import eword from 'echarts-wordcloud'
 import VueWordCloud from 'vuewordcloud'
 import axios from 'axios';
-
+// import krJson from '~/static/map/koreaMap.json'
 import { mapActions, mapState } from 'vuex'
 
 
 export default {
-  // head:{
-  //   script:[
-  //     {src:'~static/map/koreaMap.json'}
-  //   ]
-  // },
+
   name: '',
   components: {
     [VueWordCloud.name]: VueWordCloud,
@@ -73,20 +61,19 @@ export default {
         { value: 'satisfaction', text: '만족도' },
       ],
       statisticsClass: 'sightNum',
-      // wordList: [
-      //   ['romance', 10.4],
-      //   ['horror', 3],
-      //   ['fantasy', 7],
-      //   ['adventure', 3],
-      //   ['하이요', 4],
-      //   ['히히히히히힣', 11],
-      // ],
       fontSizeMapper: (word) => Math.log2(word.value) * 5,
       priceList:[],
       foodList:[],
       natureList:[],
 
       colorIndex:4,
+
+      // ////
+      // province: undefined,
+      // currentProvince: undefined,
+      // mapArea: MAP_AREA,
+
+      // localSeatInfo : null,
     }
   },
   computed: {
@@ -108,7 +95,7 @@ export default {
     this.mapopen();
     this.statisticsChange();
     // this.visitedWords();
-
+    // this.drawMap();
   },
   methods: {
     ...mapActions('statistics', [
@@ -199,151 +186,162 @@ export default {
         myChart.setOption(option)
       }
     },
-    mapopen(){
+    async mapopen(){
+
+      const chartDom2 = document.getElementById('myMap');
+      const myChart2 = echarts.init(chartDom2);
+      let geoJson;
 
 
-      const chartDom = document.getElementById('krMap');
-      const myChart = echarts.init(chartDom);
-      let option;
+      myChart2.showLoading();
 
-      myChart.showLoading();
-      axios.get('/data/asset/geo/USA.json').then( function (usaJson) {
-
-        // console.log(JSON.stringify(usaJson,null,2))
-        myChart.hideLoading();
-        echarts.registerMap('USA', usaJson, {
-          Alaska: {
-            left: -131,
-            top: 25,
-            width: 15
-          },
-          Hawaii: {
-            left: -110,
-            top: 28,
-            width: 5
-          },
-          'Puerto Rico': {
-            left: -76,
-            top: 26,
-            width: 2
-          }
-        });
-        option = {
-          title: {
-            text: 'USA Population Estimates (2012)',
-            subtext: 'Data from www.census.gov',
-            sublink: 'http://www.census.gov/popest/data/datasets.html',
-            left: 'right'
-          },
-          tooltip: {
-            trigger: 'item',
-            showDelay: 0,
-            transitionDuration: 0.2
-          },
-          visualMap: {
-            left: 'right',
-            min: 500000,
-            max: 38000000,
-            inRange: {
-              color: [
-                '#313695',
-                '#4575b4',
-                '#74add1',
-                '#abd9e9',
-                '#e0f3f8',
-                '#ffffbf',
-                '#fee090',
-                '#fdae61',
-                '#f46d43',
-                '#d73027',
-                '#a50026'
-              ]
-            },
-            text: ['High', 'Low'],
-            calculable: true
-          },
-          toolbox: {
-            show: true,
-            left: 'left',
-            top: 'top',
-            feature: {
-              dataView: { readOnly: false },
-              restore: {},
-              saveAsImage: {}
-            }
-          },
-          series: [
-            {
-              name: 'USA PopEstimates',
-              type: 'map',
-              roam: true,
-              map: 'USA',
-              emphasis: {
-                label: {
-                  show: true
-                }
-              },
-              data: [
-                { name: 'Alabama', value: 4822023 },
-                { name: 'Alaska', value: 731449 },
-                { name: 'Arizona', value: 6553255 },
-                { name: 'Arkansas', value: 2949131 },
-                { name: 'California', value: 38041430 },
-                { name: 'Colorado', value: 5187582 },
-                { name: 'Connecticut', value: 3590347 },
-                { name: 'Delaware', value: 917092 },
-                { name: 'District of Columbia', value: 632323 },
-                { name: 'Florida', value: 19317568 },
-                { name: 'Georgia', value: 9919945 },
-                { name: 'Hawaii', value: 1392313 },
-                { name: 'Idaho', value: 1595728 },
-                { name: 'Illinois', value: 12875255 },
-                { name: 'Indiana', value: 6537334 },
-                { name: 'Iowa', value: 3074186 },
-                { name: 'Kansas', value: 2885905 },
-                { name: 'Kentucky', value: 4380415 },
-                { name: 'Louisiana', value: 4601893 },
-                { name: 'Maine', value: 1329192 },
-                { name: 'Maryland', value: 5884563 },
-                { name: 'Massachusetts', value: 6646144 },
-                { name: 'Michigan', value: 9883360 },
-                { name: 'Minnesota', value: 5379139 },
-                { name: 'Mississippi', value: 2984926 },
-                { name: 'Missouri', value: 6021988 },
-                { name: 'Montana', value: 1005141 },
-                { name: 'Nebraska', value: 1855525 },
-                { name: 'Nevada', value: 2758931 },
-                { name: 'New Hampshire', value: 1320718 },
-                { name: 'New Jersey', value: 8864590 },
-                { name: 'New Mexico', value: 2085538 },
-                { name: 'New York', value: 19570261 },
-                { name: 'North Carolina', value: 9752073 },
-                { name: 'North Dakota', value: 699628 },
-                { name: 'Ohio', value: 11544225 },
-                { name: 'Oklahoma', value: 3814820 },
-                { name: 'Oregon', value: 3899353 },
-                { name: 'Pennsylvania', value: 12763536 },
-                { name: 'Rhode Island', value: 1050292 },
-                { name: 'South Carolina', value: 4723723 },
-                { name: 'South Dakota', value: 833354 },
-                { name: 'Tennessee', value: 6456243 },
-                { name: 'Texas', value: 26059203 },
-                { name: 'Utah', value: 2855287 },
-                { name: 'Vermont', value: 626011 },
-                { name: 'Virginia', value: 8185867 },
-                { name: 'Washington', value: 6897012 },
-                { name: 'West Virginia', value: 1855413 },
-                { name: 'Wisconsin', value: 5726398 },
-                { name: 'Wyoming', value: 576412 },
-                { name: 'Puerto Rico', value: 3667084 }
-              ]
-            }
-          ]
-        };
-        myChart.setOption(option);
+      await axios.get('/data/asset/geo/USA.json').then( function (usaJson) {
+        geoJson=usaJson;
+      });
+      console.log(JSON.stringify(geoJson,null,2))
+      myChart2.hideLoading();
+      echarts.registerMap('USA', geoJson, {
+        Alaska: {
+          left: -131,
+          top: 25,
+          width: 15
+        },
+        Hawaii: {
+          left: -110,
+          top: 28,
+          width: 5
+        },
+        'Puerto Rico': {
+          left: -76,
+          top: 26,
+          width: 2
+        }
       });
 
-      option && myChart.setOption(option);
+
+      const option = {
+        title: {
+          text: 'USA Population Estimates (2012)',
+          subtext: 'Data from www.census.gov',
+          sublink: 'http://www.census.gov/popest/data/datasets.html',
+          left: 'right'
+        },
+        tooltip: {
+          trigger: 'item',
+          showDelay: 0,
+          transitionDuration: 0.2
+        },
+        visualMap: {
+          left: 'right',
+          min: 500000,
+          max: 38000000,
+          inRange: {
+            color: [
+              '#313695',
+              '#4575b4',
+              '#74add1',
+              '#abd9e9',
+              '#e0f3f8',
+              '#ffffbf',
+              '#fee090',
+              '#fdae61',
+              '#f46d43',
+              '#d73027',
+              '#a50026'
+            ]
+          },
+          text: ['High', 'Low'],
+          calculable: true
+        },
+        toolbox: {
+          show: true,
+          left: 'left',
+          top: 'top',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        series: [
+          {
+            name: '테스트',
+            type: 'map',
+            roam: 'false',
+            map: 'USA',
+            emphasis: {
+              label: {
+                show: false
+              }
+            },
+            data: [
+              { name: 'Alabama', value: 4822023 },
+              { name: 'Alaska', value: 731449 },
+              { name: 'Arizona', value: 6553255 },
+              { name: 'Arkansas', value: 2949131 },
+              { name: 'California', value: 38041430 },
+              { name: 'Colorado', value: 5187582 },
+              { name: 'Connecticut', value: 3590347 },
+              { name: 'Delaware', value: 917092 },
+              { name: 'District of Columbia', value: 632323 },
+              { name: 'Florida', value: 19317568 },
+              { name: 'Georgia', value: 9919945 },
+              { name: 'Hawaii', value: 1392313 },
+              { name: 'Idaho', value: 1595728 },
+              { name: 'Illinois', value: 12875255 },
+              { name: 'Indiana', value: 6537334 },
+              { name: 'Iowa', value: 3074186 },
+              { name: 'Kansas', value: 2885905 },
+              { name: 'Kentucky', value: 4380415 },
+              { name: 'Louisiana', value: 4601893 },
+              { name: 'Maine', value: 1329192 },
+              { name: 'Maryland', value: 5884563 },
+              { name: 'Massachusetts', value: 6646144 },
+              { name: 'Michigan', value: 9883360 },
+              { name: 'Minnesota', value: 5379139 },
+              { name: 'Mississippi', value: 2984926 },
+              { name: 'Missouri', value: 6021988 },
+              { name: 'Montana', value: 1005141 },
+              { name: 'Nebraska', value: 1855525 },
+              { name: 'Nevada', value: 2758931 },
+              { name: 'New Hampshire', value: 1320718 },
+              { name: 'New Jersey', value: 8864590 },
+              { name: 'New Mexico', value: 2085538 },
+              { name: 'New York', value: 19570261 },
+              { name: 'North Carolina', value: 9752073 },
+              { name: 'North Dakota', value: 699628 },
+              { name: 'Ohio', value: 11544225 },
+              { name: 'Oklahoma', value: 3814820 },
+              { name: 'Oregon', value: 3899353 },
+              { name: 'Pennsylvania', value: 12763536 },
+              { name: 'Rhode Island', value: 1050292 },
+              { name: 'South Carolina', value: 4723723 },
+              { name: 'South Dakota', value: 833354 },
+              { name: 'Tennessee', value: 6456243 },
+              { name: 'Texas', value: 26059203 },
+              { name: 'Utah', value: 2855287 },
+              { name: 'Vermont', value: 626011 },
+              { name: 'Virginia', value: 8185867 },
+              { name: 'Washington', value: 6897012 },
+              { name: 'West Virginia', value: 1855413 },
+              { name: 'Wisconsin', value: 5726398 },
+              { name: 'Wyoming', value: 576412 },
+              { name: 'Puerto Rico', value: 3667084 }
+            ]
+          
+          }
+        ]
+      };
+
+      // const confirmMap=echarts.getMap('USA').geoJSON;
+
+      console.log('테스트')
+      // console.log(JSON.stringify(confirmMap,null,2))
+      myChart2.setOption(option);
+
+      console.log(JSON.stringify(myChart2.getOption(),null,2))
+
+      option && myChart2.setOption(option);
 
     },
     colorPick(selPercent){
@@ -360,7 +358,7 @@ export default {
       }
       return colorArr[this.colorIndex]
     },
-    
+
   },
 }
 </script>
@@ -455,4 +453,20 @@ export default {
   bottom: 20vh;
   left: 20vh;
 }
+.map-wrapper {
+  position:relative;
+  text-align: center;
+}
+.background {
+  /* fill: #021019; */
+  fill: transparent;
+  pointer-events: all;
+}
+  
+.map-layer {
+  fill: #08304b;
+  stroke: #021019;
+  stroke-width: 1px;
+}
+
 </style>

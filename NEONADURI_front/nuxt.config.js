@@ -69,16 +69,12 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
-<<<<<<< HEAD
-    proxy:true
-=======
     proxy: true,
   },
   proxy:{
     '/data':{
       target: 'https://echarts.apache.org/examples'
     }
->>>>>>> d492c1755a1275f8e017e59e4e62095f02b5da4c
   },
 
   proxy:{
