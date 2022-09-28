@@ -1,31 +1,19 @@
 import {getSat,getVisited,getSel} from '~/api/statistics'
+import koreaMap from '~/static/map/koreaMap.json'
 
 export const state = () =>(
     {
         words:[],
-        // priceList:[],
-        // foodList:[],
-        // natureList:[],
         satList:[],
         regionList:[],
+        koreaMap,
+        introData:{},
     }
 )
 
 
 export const mutations = {
     SET_SAT(state, payload){
-        console.log("mutataion : "+payload)
-        // payload.forEach(element => {
-        //   console.log(element.satType)
-
-        //   if(element.satType ==='0'){
-        //     state.priceList.push(payload.satScore);
-        //   }else if(element.satType==='1'){
-        //     state.foodList.push(payload.satScore);
-        //   }if(element.satType==='2'){
-        //     state.natureList.push(payload.satScore);
-        //   }
-        // });
         state.satList=payload
     },
     SET_SEL(state, payload){
@@ -39,13 +27,26 @@ export const mutations = {
       })
     },
     SET_VISITED(state, payload){
+      state.regionList=payload
+
+      state.introData.maxValue=0;
+      state.introData.minValue=payload[0].visitedNum
+
       payload.forEach(element=>{
-        const arr=[];
+        const obj={}
 
-        arr.push(element.visitedRegion);
-        arr.push(element.visitedNum);
+        obj.name=element.visitedRegion;
+        obj.value=element.visitedNum;
 
-        state.regionList.push(arr);
+        state.regionList.push(obj);
+        // ///////////////////////
+        if(state.introData.maxValue < obj.value){
+            state.introData.maxValue=obj.value
+        }
+        
+        if(state.introData.minValue > obj.value){
+            state.introData.minValue=obj.value
+        }
       })
     }
 }
