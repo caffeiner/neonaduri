@@ -77,9 +77,6 @@ export default {
     }
   },
 
-  proxy:{
-    '/data/':'https://echarts.apache.org/examples'
-  },
 
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
