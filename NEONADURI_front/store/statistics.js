@@ -17,6 +17,7 @@ export const mutations = {
         state.satList=payload
     },
     SET_SEL(state, payload){
+      state.words=[]
       payload.forEach(element=>{
         const arr=[]
 
@@ -27,6 +28,7 @@ export const mutations = {
       })
     },
     SET_VISITED(state, payload){
+      state.regionList=[]
 
       state.introData.maxValue=0;
       state.introData.minValue=payload[0].visitedNum
@@ -42,7 +44,7 @@ export const mutations = {
         if(state.introData.maxValue < obj.value){
             state.introData.maxValue=obj.value
         }
-        
+
         if(state.introData.minValue > obj.value){
             state.introData.minValue=obj.value
         }
