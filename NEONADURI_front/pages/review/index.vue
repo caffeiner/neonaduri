@@ -398,6 +398,7 @@ export default {
 }
 .spot-route {
   margin-bottom: 3%;
+  cursor: pointer;
 }
 .spot-main-title {
   width: 90%;

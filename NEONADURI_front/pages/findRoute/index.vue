@@ -1,7 +1,8 @@
 <template>
   <div class="findRoute">
+    <loading-component v-if="isLoading" />
     <div class="route-container">
-      <div class="map">
+      <div class="map mt-4">
         <div id="map_wrap" class="map_wrap">
           <div id="map_div"></div>
         </div>
@@ -90,6 +91,7 @@
               >
             </div>
           </div>
+          <div id="result"></div>
         </div>
         <div class="route-list">
           <div class="mt-2">
@@ -105,8 +107,9 @@
               <div
                 v-for="(item, index) in stopOverList"
                 :key="index"
-                style="display: flex; align-items: center"
+                style="display: flex; align-items: center; cursor: pointer;"
                 class="mt-3"
+
               >
                 <v-icon class="ml-2 mr-2">mdi-numeric-{{ index + 1 }}-box</v-icon>
                 <span style="font: 25px" class="mr-3">
@@ -125,6 +128,10 @@
               src="http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png"
               style="vertical-align: middle"
             /><span>{{ endPointObject.name }}</span>
+          </div>
+          <div v-if="totalTime !== 0" class="mt-3 ml-3">
+            <div>총 시간 : {{ totalTime + '분' }}</div>
+            <div>총 거리 : {{ totalDistance + 'km' }}</div>
           </div>
         </div>
       </div>
@@ -153,11 +160,10 @@
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import { mapState, mapMutations } from 'vuex'
+import LoadingComponent from '../../components/LoadingComponent.vue'
 
 export default {
-  components:{
-    draggable
-  },
+  components: { LoadingComponent,draggable },
   head: {
     script: [
       {
@@ -190,6 +196,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       option: '0',
       options: [
         {
@@ -238,6 +245,8 @@ export default {
       markerArr: [],
       labelArr: [],
       resultMarkerArr: [],
+      totalDistance: 0,
+      totalTime: 0,
     }
   },
   async mounted() {
@@ -606,6 +615,7 @@ export default {
       console.log(dataInfo)
       let resultData = null
       let resultFeatures = null
+      this.isLoading = true
       await axios
         .post(
           'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
@@ -615,20 +625,16 @@ export default {
         .then(function (response) {
           resultData = response.data.properties
           resultFeatures = response.data.features
-          console.log('길바꾸기')
-          console.log(JSON.stringify(this.stopOverList,null,2))
           this.CHANGE_ROUTE(this.stopOverList);
+          this.isLoading = false
         })
-
-      console.log(JSON.stringify(resultData, null, 2))
-      console.log(JSON.stringify(resultFeatures, null, 2))
-
+        .catch((error) => {
+          this.isLoading = false
+        })
       // 결과 출력
-      const tDistance =
-        '총 거리 : ' + (resultData.totalDistance / 1000).toFixed(1) + 'km,  '
-      const tTime = '총 시간 : ' + (resultData.totalTime / 60).toFixed(0) + '분'
-      $('#result').text(tDistance + tTime)
 
+      this.totalDistance = (resultData.totalDistance / 1000).toFixed(1)
+      this.totalTime = (resultData.totalTime / 60).toFixed(0)
       // 기존의 길과 포인트들 전부 삭제
       if (this.resultInfoArr.length > 0) {
         for (const i in this.resultInfoArr) {
@@ -732,6 +738,7 @@ export default {
           
         }
       }
+      this.isLoading = false
     },
     // 경유지 지우기
     deleteStopOver(index) {
@@ -761,11 +768,16 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-
+@font-face {
+  font-family: 'SEBANG_Gothic_Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 #route-modal {
   font-family: 'GmarketSansMedium';
 }
-
 .findRoute-btn {
   color: white;
   height: 60%;
@@ -790,6 +802,7 @@ export default {
   border-radius: 15px;
   width: 50%;
   height: 98%;
+  margin-left: 1vw;
 }
 
 .search-wrapper {
@@ -804,7 +817,9 @@ export default {
 }
 
 .findRoute {
-  background-color: #eaf2f9;
+  background-image: url('/background/cloud-background.svg');
+  background-size: cover;
+  font-family: 'GmarketSansMedium';
   overflow: auto;
   width: 100vw;
   height: 100vh;
@@ -925,7 +940,6 @@ export default {
 }
 
 .route-search-container {
-  font-family: 'GmarketSansMedium';
   width: 490px;
   display: block;
   margin: 0 auto;
@@ -938,6 +952,7 @@ input#searchKeyword {
   height: 45px;
   padding: 0 20px;
   font-size: 1rem;
+  background-color: white;
   border: 1px solid #d0cfce;
   outline: none;
 }
@@ -982,10 +997,11 @@ input#searchKeyword:focus:-ms-placeholder {
   display: none;
 }
 .middle input[type='radio']:checked + .box {
-  background-color: #007e90;
+  background-color: #a9e4fc;
+  border: 5px solid #1362bc;
 }
 .middle input[type='radio']:checked + .box span {
-  color: white;
+  color: #20656f;
   transform: translateY(70px);
 }
 .middle input[type='radio']:checked + .box span:before {
@@ -993,6 +1009,8 @@ input#searchKeyword:focus:-ms-placeholder {
   opacity: 1;
 }
 .middle .box {
+  margin-left: 1vw;
+  border-radius: 15px;
   width: 200px;
   height: 300px;
   background-color: #fff;
@@ -1002,7 +1020,7 @@ input#searchKeyword:focus:-ms-placeholder {
   text-align: center;
   cursor: pointer;
   position: relative;
-  font-family: 'Inter', sans-serif;
+  font-family: 'SEBANG_Gothic_Bold';
   font-weight: 900;
 }
 .middle .box:active {
@@ -1017,7 +1035,7 @@ input#searchKeyword:focus:-ms-placeholder {
   transition: all 300ms ease;
   font-size: 1.5em;
   user-select: none;
-  color: #007e90;
+  color: #669198;
 }
 .middle .box span:before {
   font-size: 1.2em;
