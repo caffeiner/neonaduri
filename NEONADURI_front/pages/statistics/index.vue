@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       buttonActive:[
-        true, false, false
+        false, true, true
       ],
       statisticsOption: [
         { value: 'sightNum', text: '관광여행횟수' },
@@ -483,10 +483,10 @@ a:active{
 
 .buttonPlace{
   position:absolute;
-  top:1px;
+  top:24px;
   right:1%;
   width:14%;
-  height:73%;
+  height:43%;
 
   display:flex;
   flex-direction: column;
