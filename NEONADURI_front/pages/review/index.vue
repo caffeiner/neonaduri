@@ -61,10 +61,20 @@
           </div>
         </div>
         <div class="spot-routeList">
-          <div v-for="(route, i) in routeList" :key="i" class="spot-route">
-            {{ route.name }}
-            <v-icon class="mb-1" @click="deleteStopOver(i)">mdi-delete</v-icon>
-          </div>
+          <draggable v-model="stopOverList">
+            <transition-group>
+              <div
+                v-for="(stopOver, i) in stopOverList"
+                :key="i"
+                class="spot-route"
+              >
+                {{ stopOver.name }}
+                <v-icon class="mb-1" @click="deleteStopOver(i)"
+                  >mdi-delete</v-icon
+                >
+              </div>
+            </transition-group>
+          </draggable>
           <div class="spot-route-search">
             <v-btn class="review-btns" @click="routeSearch">경로찾기</v-btn>
           </div>
@@ -178,10 +188,11 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import draggable from 'vuedraggable'
 import ModifyModal from '~/components/ModifyModal.vue'
 
 export default {
-  components: { ModifyModal },
+  components: { ModifyModal, draggable },
   data() {
     return {
       inputToggle: false,
@@ -196,14 +207,21 @@ export default {
     ...mapState('review', ['reviewList']),
     ...mapState('route', ['routeList']),
   },
+  watch: {
+    stopOverList() {
+      this.CHANGE_ROUTE(this.stopOverList)
+    },
+  },
   created() {
     // 불러올 때 review_id도 불러옴
     this.callReviews(this.spot.spotId)
     this.stopOverList = JSON.parse(JSON.stringify(this.routeList))
   },
+
   mounted() {},
+
   methods: {
-    ...mapMutations('route', ['ADD_ROUTE', 'DELETE_ROUTE']),
+    ...mapMutations('route', ['ADD_ROUTE', 'DELETE_ROUTE', 'CHANGE_ROUTE']),
     ...mapMutations('review', ['CLEAR_REVIEW', 'SET_REVIEW']),
     ...mapActions('spot', ['changeContent']),
     ...mapActions('review', ['callReviews', 'confirmPass']),
@@ -266,7 +284,6 @@ export default {
     deleteStopOver(index) {
       this.DELETE_ROUTE(index)
       // 지울 부분을 리스트에서 제거
-      this.stopOverList.splice(index, 1)
     },
     routeSearch() {
       this.$router.push('/findRoute')
@@ -445,6 +462,7 @@ export default {
 }
 .spot-route {
   margin-bottom: 3%;
+  cursor: pointer;
 }
 .spot-main-title {
   width: 90%;

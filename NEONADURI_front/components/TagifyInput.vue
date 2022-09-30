@@ -47,7 +47,7 @@ export default {
 }
 .tagify__tag {
   background-color: #f1f1f1;
-  font-size: 10px;
+  font-size: 15px;
 }
 .tagify__input {
   width: 100%;
