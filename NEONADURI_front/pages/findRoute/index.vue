@@ -175,7 +175,7 @@ export default {
     stopOverList(){
       // console.log('바뀝니다')
       this.CHANGE_ROUTE(this.stopOverList);
-      console.log(JSON.stringify(this.stopOverList,null,2))
+      // console.log(JSON.stringify(this.stopOverList,null,2))
       // 먼저 그려져있던 포인트들 전부 지우기
       for (const i in this.stopOverObjectList) {
         this.stopOverObjectList[i].setMap(null)
