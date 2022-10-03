@@ -1,11 +1,8 @@
 package neonaduri.dto.response;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter @Setter @ToString
+@Getter
 public class RecommendSpotRes {
 
     private final Long spotId;
@@ -16,8 +13,7 @@ public class RecommendSpotRes {
 
     private final String spotImage;
 
-    @Builder
-    RecommendSpotRes(Long spotId, String spotName, String spotContent, String spotImage){
+    public RecommendSpotRes(Long spotId, String spotName, String spotContent, String spotImage) {
         this.spotId = spotId;
         this.spotName = spotName;
         this.spotContent = spotContent;

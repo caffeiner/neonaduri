@@ -23,28 +23,7 @@ public class RecommendService implements RedisConst {
 
     public RecommendSpotRes getHotSpot() {
         Long hotSpotId = countHotSpotFromRedis();
-
-//        RecommendSpotRes hotSpotBySpotId = spotRepository.findHotSpotBySpotId(hotSpotId);
-//        System.out.println("hotSpotBySpotId = " + hotSpotBySpotId);
-        return null;
-    }
-
-    private Long countHotSpotFromRedis() {
-
-        final List<Long> allCacheInRedis = redisTemplate.opsForList().range(REDIS_KEY, 0, -1);
-
-        if (Objects.isNull(allCacheInRedis)) throw new NoSuchElementException();
-
-        Optional<Long> optionSpotId = allCacheInRedis.stream()
-                .collect(Collectors.groupingBy(Function.identity(),
-                        Collectors.counting()))
-                .entrySet()
-                .stream()
-                .max(Comparator.comparing(Map.Entry::getValue))
-                .map(Map.Entry::getKey);
-
-        return Long.parseLong(String.valueOf(
-                optionSpotId.orElse(REDIS_DEFAULT_SPOT_ID)));
+        return spotRepository.findHotSpotBySpotId(hotSpotId);
     }
 
     @Async
@@ -53,6 +32,23 @@ public class RecommendService implements RedisConst {
 
         if (!canCachingSize()) listOperations.leftPop(REDIS_KEY);
         listOperations.rightPush(REDIS_KEY, spotId);
+    }
+
+    private Long countHotSpotFromRedis() {
+
+        final List<Long> allCacheInRedis = redisTemplate.opsForList()
+                .range(REDIS_KEY, 0, -1);
+
+        Optional<Long> optionSpotId = allCacheInRedis.stream()
+                .collect(Collectors.groupingBy(
+                        Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey);
+
+        return Long.parseLong(String.valueOf(
+                optionSpotId.orElse(REDIS_DEFAULT_SPOT_ID)));
     }
 
     private Boolean canCachingSize() {
