@@ -1,6 +1,7 @@
 package neonaduri.api.repository;
 
 import neonaduri.domain.Spot;
+import neonaduri.dto.response.RecommendSpotRes;
 import neonaduri.dto.response.SpotContentRes;
 import neonaduri.dto.response.SpotDetailsRes;
 import org.springframework.data.jpa.repository.JpaRepository;

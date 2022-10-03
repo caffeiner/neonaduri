@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class SpotService {
 
     private final SpotRepository spotRepository;
+    private final RecommendService recommendService;
 
 
     public SpotDetailsRes getSpotDetailsInfo(Long spotId) {
@@ -44,6 +45,9 @@ public class SpotService {
                                 .collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
+
+        /* 3. Spot 정보를 캐시를 해서 Recommend Service에 넣어준다*/
+        recommendService.cachingSpotData(spotId);
 
         /* 3. 마지막으로 SpotDetailsRes로 반환시켜준다. */
         return SpotDetailsRes.builder()
