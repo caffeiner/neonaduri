@@ -128,7 +128,7 @@ export default {
             },
             {
               icon: 'park.png',
-              name: '관광공원/허브마을',
+              name: '관광농원/허브마을',
               isSelected: false,
             },
             {
