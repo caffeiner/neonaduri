@@ -15,7 +15,7 @@
         />
       </div>
       <div v-show="statisticsClass === 'satisfaction'" class="sat-box">
-        <canvas id="myChart" width="150" height="150"></canvas>
+        <canvas id="myChart" width="800" height="450"></canvas>
       </div>
       <div class="buttonPlace">
         <div>
@@ -48,14 +48,12 @@
   </div>
 </template>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 import * as echarts from 'echarts' // echart를 전역으로 불러옴
 import VueWordCloud from 'vuewordcloud'
 import { Chart, registerables } from 'chart.js'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
-Chart.register(...registerables)
 export default {
   name: '',
   components: {
@@ -111,18 +109,21 @@ export default {
             backgroundColor: '#f87979',
             borderColor: '#f87979',
             data: this.priceList,
+            borderWidth: 5,
           },
           {
             label: '식당 및 음식',
             backgroundColor: '#00FFFF',
             borderColor: '#00FFFF',
             data: this.foodList,
+            borderWidth: 5,
           },
           {
             label: '자연경관',
             backgroundColor: '#FF00FF',
             borderColor: '#FF00FF',
             data: this.natureList,
+            borderWidth: 5,
           },
         ],
       }
@@ -144,51 +145,47 @@ export default {
   },
   methods: {
     fillSat() {
-      const ctx = document.getElementById('myChart')
+      Chart.register(...registerables)
+
+      const ctx = document.getElementById('myChart').getContext('2d')
       this.myChart = new Chart(ctx, {
         type: 'line',
-        data: {
-          labels: [
-            '서울',
-            '부산',
-            '대구',
-            '인천',
-            '광주',
-            '대전',
-            '울산',
-            '세종',
-            '경기',
-            '강원',
-            '충북',
-            '충남',
-            '전북',
-            '전남',
-            '경북',
-            '경남',
-            '제주',
-          ],
-          datasets: [
-            {
-              label: '물가',
-              backgroundColor: '#f87979',
-              borderColor: '#f87979',
-              data: this.priceList,
+        data: this.chartData,
+        options: {
+          plugins: {
+            legend: {
+              labels: {
+                // This more specific font property overrides the global property
+                font: {
+                  size: 15,
+                  family: 'GmarketSansMedium',
+                },
+              },
             },
-            {
-              label: '식당 및 음식',
-              backgroundColor: '#00FFFF',
-              borderColor: '#00FFFF',
-              data: this.foodList,
+          },
+          scales: {
+            x: {
+              ticks: {
+                font: {
+                  size: 15,
+                  family: 'GmarketSansMedium',
+                },
+              },
             },
-            {
-              label: '자연경관',
-              backgroundColor: '#FF00FF',
-              borderColor: '#FF00FF',
-              data: this.natureList,
+            y: {
+              ticks: {
+                font: {
+                  size: 15,
+                  family: 'GmarketSansMedium',
+                },
+              },
             },
-          ],
+          },
+          responsive: false,
+          maintainAspectRatio: true,
         },
       })
+      console.log(this.myChart)
     },
     ...mapActions('statistics', [
       'callSatList',
