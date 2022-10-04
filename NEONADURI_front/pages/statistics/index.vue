@@ -148,7 +148,6 @@ export default {
   mounted() {
     // Initialize the echarts instance based on the prepared dom
     this.mapopen()
-    console.log(this.chartData)
   },
   methods: {
     ...mapActions('statistics', [
@@ -190,12 +189,12 @@ export default {
       echarts.registerMap('korea', geoJson)
 
       const option = {
-        title: {
-          text: '대한민국 방문횟수(2021)',
-          // subtext: 'Data from www.census.gov',
-          // sublink: 'http://www.census.gov/popest/data/datasets.html',
-          left: 'center',
-        },
+        // title: {
+        //   text: '대한민국 방문횟수(2021)',
+        //   // subtext: 'Data from www.census.gov',
+        //   // sublink: 'http://www.census.gov/popest/data/datasets.html',
+        //   left: 'center'
+        // },
         tooltip: {
           trigger: 'item',
           showDelay: 0,
